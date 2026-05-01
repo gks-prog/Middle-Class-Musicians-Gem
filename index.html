@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Middle Class Musicians | Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- GSAP & Lenis for Smooth Scrolling -->
+    <script src="https://unpkg.com/@studio-freight/lenis@1.0.39/dist/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+<body>
+
+    <!-- CINEMATIC LOADER -->
+    <div class="loader">
+        <div class="loader-text">Middle Class Musicians</div>
+    </div>
+
+    <!-- Cinematic Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Cinematic Ambient Lighting -->
+    <div class="ambient-light"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="navbar">
+        <div class="logo nav-item">MCM.</div>
+        
+        <!-- Desktop Nav -->
+        <div class="nav-links desktop-only">
+            <a href="#about" class="nav-item">About</a>
+            <a href="#work" class="nav-item">Work</a>
+            <a href="#services" class="nav-item">Services</a>
+            <a href="#contact" class="btn-outline nav-item">Contact</a>
+        </div>
+
+        <!-- Mobile Hamburger -->
+        <div class="hamburger nav-item mobile-only">
+            <div class="line line-1"></div>
+            <div class="line line-2"></div>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div class="mobile-menu">
+        <div class="mobile-menu-inner">
+            <a href="#about" class="mobile-link">About</a>
+            <a href="#work" class="mobile-link">Work</a>
+            <a href="#services" class="mobile-link">Services</a>
+            <a href="#contact" class="mobile-link">Contact</a>
+        </div>
+    </div>
+
+    <!-- 1. HERO SECTION -->
+    <section id="hero" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <div class="text-mask"><span class="hero-word">RECORD.</span></div>
+                <div class="text-mask"><span class="hero-word">CREATE.</span></div>
+                <div class="text-mask"><span class="hero-word">PERFORM.</span></div>
+            </h1>
+            <p class="hero-subtext">Professional Recording Studio in Delhi<br>Starting ₹350/hr</p>
+            
+            <div class="hero-cta">
+                <a href="#contact" class="btn-primary">Book Now</a>
+            </div>
+
+            <div class="scroll-indicator">
+                <span>Explore</span>
+                <div class="arrow">↓</div>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="hero-image-container">
+                <div class="hero-image" style="background-image: url('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=2070&auto=format&fit=crop');"></div>
+                <div class="image-gradient-overlay"></div>
+            </div>
+            
+            <!-- Now Playing UI Card -->
+            <div class="now-playing-card floating">
+                <div class="album-art" style="background-image: url('https://images.unsplash.com/photo-1619983081563-430f63602796?q=80&w=1000&auto=format&fit=crop');"></div>
+                <div class="track-info">
+                    <p class="track-title">Midnight Session</p>
+                    <p class="track-artist">MCM Originals</p>
+                </div>
+                <div class="audio-waves">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. ABOUT SECTION -->
+    <section id="about" class="about section-padding">
+        <div class="about-grid">
+            <div class="about-text">
+                <h2 class="section-title gs-reveal">THE SANCTUARY<br>FOR THE DRIVEN.</h2>
+                <div class="text-divider gs-reveal"></div>
+                <p class="gs-reveal">We believe world-class sound shouldn't require a world-class budget. Middle Class Musicians is an accessible, premium recording sanctuary built for artists, producers, and beginners who want zero compromises on quality.</p>
+                <p class="gs-reveal">Equipped with industry-standard gear, our studio is designed to inspire your best performance.</p>
+            </div>
+            <div class="about-image-wrapper gs-reveal">
+                <img src="https://images.unsplash.com/photo-1516280440502-a28ee787e914?q=80&w=1000&auto=format&fit=crop" alt="Studio Console" class="about-img">
+                <div class="image-gradient-overlay"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. PORTFOLIO / WORK -->
+    <section id="work" class="work section-padding">
+        <h2 class="section-title center gs-reveal">RECENT SESSIONS</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item gs-reveal">
+                <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1601312378427-822b2b41da35?q=80&w=1000&auto=format&fit=crop');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-info">
+                    <h3>Echoes in the Dark</h3>
+                    <p>Mixing & Mastering</p>
+                </div>
+            </div>
+            <div class="portfolio-item gs-reveal">
+                <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?q=80&w=1000&auto=format&fit=crop');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-info">
+                    <h3>Neon Dreams</h3>
+                    <p>Beat Production</p>
+                </div>
+            </div>
+            <div class="portfolio-item gs-reveal">
+                <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1520872024865-3ff2805d8bb3?q=80&w=1000&auto=format&fit=crop');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-info">
+                    <h3>Acoustic Soul</h3>
+                    <p>Vocal Recording</p>
+                </div>
+            </div>
+            <div class="portfolio-item gs-reveal">
+                <div class="item-img" style="background-image: url('https://images.unsplash.com/photo-1598653222000-6b7b7a552625?q=80&w=1000&auto=format&fit=crop');"></div>
+                <div class="item-overlay"></div>
+                <div class="item-info">
+                    <h3>Urban Flow</h3>
+                    <p>Full Production</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. SERVICES -->
+    <section id="services" class="services section-padding">
+        <h2 class="section-title center gs-reveal">CAPABILITIES</h2>
+        <div class="services-grid">
+            <div class="service-card gs-reveal">
+                <div class="card-inner">
+                    <h3 class="service-number">01</h3>
+                    <h4>Recording</h4>
+                    <p>Pristine vocal and instrument tracking with premium mics and preamps.</p>
+                </div>
+            </div>
+            <div class="service-card gs-reveal">
+                <div class="card-inner">
+                    <h3 class="service-number">02</h3>
+                    <h4>Mixing & Mastering</h4>
+                    <p>Achieve industry-standard loudness and clarity ready for Spotify & Apple Music.</p>
+                </div>
+            </div>
+            <div class="service-card gs-reveal">
+                <div class="card-inner">
+                    <h3 class="service-number">03</h3>
+                    <h4>Beat Production</h4>
+                    <p>Custom instrumentals tailored to your unique style and vision.</p>
+                </div>
+            </div>
+            <div class="service-card gs-reveal">
+                <div class="card-inner">
+                    <h3 class="service-number">04</h3>
+                    <h4>Courses</h4>
+                    <p>Learn the art of audio engineering and production from industry pros.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. CONTACT -->
+    <section id="contact" class="contact section-padding">
+        <div class="contact-content">
+            <h2 class="cta-title gs-reveal">LET'S CREATE<br>YOUR NEXT SONG.</h2>
+            
+            <div class="contact-cta gs-reveal">
+                <a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="btn-primary">Book Now</a>
+            </div>
+
+            <div class="social-links gs-reveal">
+                <a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="social-link">WhatsApp</a>
+                <a href="#" class="social-link">Instagram</a>
+                <a href="#" class="social-link">Email</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Middle Class Musicians. New Delhi, India.</p>
+    </footer>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/91XXXXXXXXXX" target="_blank" class="floating-wa" aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+    </a>
+
+    <script src="script.js"></script>
+</body>
+</html>
