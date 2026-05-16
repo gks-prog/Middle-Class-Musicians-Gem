@@ -1,0 +1,22 @@
+/src
+  /app
+    layout.tsx
+    page.tsx
+    globals.css
+  /components
+    /layout
+      Navbar.tsx
+      Footer.tsx
+      SmoothScroll.tsx
+    /sections
+      Hero.tsx
+      About.tsx
+      BeatMarketplace.tsx
+    /ui
+      MagneticButton.tsx
+      AudioPlayer.tsx
+  /hooks
+    useGSAP.ts
+  /lib
+    utils.ts
+tailwind.config.ts
