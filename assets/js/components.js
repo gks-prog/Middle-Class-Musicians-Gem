@@ -1,36 +1,29 @@
 class MCMNavbar extends HTMLElement {
   connectedCallback() {
-    const currentPath = window.location.pathname;
-    
     this.innerHTML = `
-      <header class="nav-wrapper" id="main-nav">
-        <div class="nav-inner container">
-          <a href="/" class="nav-logo">
-            <span>MCM</span>
+      <nav class="nav-wrapper" id="global-nav">
+        <div class="container nav-inner">
+          <a href="/index.html" class="nav-logo" style="font-family: var(--font-head); font-size: 1.5rem; letter-spacing: 0.1em;">
+            <span style="color: var(--gold);">MCM</span> STUDIO
           </a>
           <ul class="nav-links">
-            <li><a href="/studio.html" ${currentPath.includes('studio') ? 'class="active"' : ''}>Studio</a></li>
-            <li><a href="/services/" ${currentPath.includes('services') ? 'class="active"' : ''}>Services</a></li>
-            <li><a href="/portfolio.html" ${currentPath.includes('portfolio') ? 'class="active"' : ''}>Portfolio</a></li>
-            <li><a href="/courses.html" ${currentPath.includes('courses') ? 'class="active"' : ''}>Courses</a></li>
-            <li><a href="/auth/login.html" class="accent-text">Portal</a></li>
+            <li><a href="/studio.html">Studio</a></li>
+            <li><a href="/services.html">Services</a></li>
+            <li><a href="/portfolio.html">Portfolio</a></li>
+            <li><a href="/courses.html">Courses</a></li>
+            <li><a href="/login.html" style="color: var(--gold);">Client Portal</a></li>
           </ul>
-          <a href="https://wa.me/919315778147" class="nav-cta" data-sound="hover">Book Session</a>
         </div>
-      </header>
+      </nav>
     `;
-
-    this.initScrollListener();
+    this.initScroll();
   }
 
-  initScrollListener() {
-    const nav = this.querySelector('#main-nav');
+  initScroll() {
+    const nav = this.querySelector('#global-nav');
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
-      }
+      if (window.scrollY > 50) nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
     }, { passive: true });
   }
 }
@@ -39,21 +32,12 @@ class MCMFooter extends HTMLElement {
   connectedCallback() {
     const year = new Date().getFullYear();
     this.innerHTML = `
-      <footer class="site-footer">
-        <div class="footer-inner container">
-          <div class="footer-top">
-            <div class="brand-info">
-              <h3 class="nav-logo">Middle Class Musicians</h3>
-              <p style="color: var(--text-muted); margin-top: 1rem; max-width: 300px;">
-                Professional recording, mixing, and beat production environment in Delhi.
-              </p>
-            </div>
-            <div class="footer-links">
-               </div>
-          </div>
-          <div class="footer-bottom">
-            <span>&copy; ${year} Middle Class Musicians. All rights reserved.</span>
-            <span>A venture by Wenon Bont & Bunny Nation Music</span>
+      <footer style="padding: 4rem 0; background: var(--bg-secondary); border-top: 1px solid var(--line); text-align: center;">
+        <div class="container">
+          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Middle Class Musicians</h3>
+          <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem;">Built for sound. Designed for vision. Delhi, India.</p>
+          <div style="font-size: 0.8rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 2rem;">
+            &copy; ${year} Middle Class Musicians. All rights reserved.
           </div>
         </div>
       </footer>
