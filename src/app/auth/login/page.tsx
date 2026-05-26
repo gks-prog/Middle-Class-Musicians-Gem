@@ -2,8 +2,8 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
 
@@ -36,14 +36,12 @@ export default function LoginPage() {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
         });
         
         if (error) throw error;
         setFeedback({ type: "success", message: "Registration successful! You can now log in." });
-        setIsSignUp(false); // Switch to login view automatically
+        setIsSignUp(false); 
+        setPassword("");
       } else {
         // Login Flow
         const { error } = await supabase.auth.signInWithPassword({
@@ -53,7 +51,7 @@ export default function LoginPage() {
         
         if (error) throw error;
         setFeedback({ type: "success", message: "Authenticating..." });
-        router.push("/blogs"); // Redirect to community/blogs after login
+        router.push("/blogs"); // Redirect to blogs after login
       }
     } catch (error: any) {
       setFeedback({ type: "error", message: error.message || "Authentication failed." });
@@ -63,9 +61,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div ref={container} className="min-h-screen flex items-center justify-center pt-20 px-6">
-      <div className="w-full max-w-md p-10 rounded-3xl bg-[#15151c] border border-white/10 relative overflow-hidden">
-        {/* Cinematic Lighting Effect */}
+    <div ref={container} className="min-h-screen flex items-center justify-center pt-20 px-6 pb-32">
+      <div className="w-full max-w-md p-10 rounded-3xl bg-[#15151c] border border-white/10 relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#d4a857]/10 blur-[80px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/3" />
         
         <div className="relative z-10 text-center mb-10 gsap-reveal">
@@ -85,6 +82,7 @@ export default function LoginPage() {
           </div>
         )}
 
+        {/* Input Details Form */}
         <form onSubmit={handleAuth} className="relative z-10 flex flex-col gap-5 gsap-reveal">
           <div>
             <label className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Email</label>
@@ -115,7 +113,7 @@ export default function LoginPage() {
             disabled={loading}
             className="w-full py-4 mt-4 bg-white text-black font-bold uppercase tracking-widest rounded-xl hover:bg-[#d4a857] transition-all disabled:opacity-50"
           >
-            {loading ? "Processing..." : (isSignUp ? "Create Account" : "Enter Portal")}
+            {loading ? "Processing..." : (isSignUp ? "Register Account" : "Secure Login")}
           </button>
         </form>
 
@@ -125,7 +123,7 @@ export default function LoginPage() {
             <button 
               type="button"
               onClick={() => { setIsSignUp(!isSignUp); setFeedback(null); }}
-              className="text-[#d4a857] font-bold cursor-pointer hover:text-white transition-colors"
+              className="text-[#d4a857] font-bold cursor-pointer hover:text-white transition-colors ml-1"
             >
               {isSignUp ? "Log In" : "Sign Up"}
             </button>
