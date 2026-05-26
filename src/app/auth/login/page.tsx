@@ -10,7 +10,6 @@ import { createClient } from "@/lib/supabase";
 export default function LoginPage() {
   const container = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const supabase = createClient();
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
@@ -18,17 +17,25 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "error" | "success"; message: string } | null>(null);
 
+  // Safe GSAP Animation (No CSS hidden traps)
   useGSAP(() => {
-    gsap.fromTo(".gsap-reveal", 
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" }
-    );
+    gsap.from(".login-anim", {
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.1,
+      ease: "power3.out",
+      clearProps: "all"
+    });
   }, { scope: container });
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setFeedback(null);
+
+    // Instantiate Supabase safely on form submit
+    const supabase = createClient();
 
     try {
       if (isSignUp) {
@@ -51,7 +58,7 @@ export default function LoginPage() {
         
         if (error) throw error;
         setFeedback({ type: "success", message: "Authenticating..." });
-        router.push("/blogs"); // Redirect to blogs after login
+        router.push("/blogs"); // Redirect back to community
       }
     } catch (error: any) {
       setFeedback({ type: "error", message: error.message || "Authentication failed." });
@@ -65,7 +72,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md p-10 rounded-3xl bg-[#15151c] border border-white/10 relative overflow-hidden shadow-2xl">
         <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#d4a857]/10 blur-[80px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/3" />
         
-        <div className="relative z-10 text-center mb-10 gsap-reveal">
+        <div className="relative z-10 text-center mb-10 login-anim">
           <Link href="/" className="inline-block font-head text-3xl tracking-widest mb-2">
             <span className="text-[#d4a857]">MCM</span> PORTAL
           </Link>
@@ -82,8 +89,7 @@ export default function LoginPage() {
           </div>
         )}
 
-        {/* Input Details Form */}
-        <form onSubmit={handleAuth} className="relative z-10 flex flex-col gap-5 gsap-reveal">
+        <form onSubmit={handleAuth} className="relative z-10 flex flex-col gap-5 login-anim">
           <div>
             <label className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Email</label>
             <input 
@@ -117,7 +123,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-8 text-center gsap-reveal relative z-10 border-t border-white/10 pt-6">
+        <div className="mt-8 text-center login-anim relative z-10 border-t border-white/10 pt-6">
           <p className="text-xs text-gray-500 uppercase tracking-widest">
             {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
             <button 
