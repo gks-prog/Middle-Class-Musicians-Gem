@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Middle Class Musicians — Studio</title>
+  
+  <link rel="stylesheet" href="/assets/css/variables.css" />
+  <link rel="stylesheet" href="/assets/css/global.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  
+  <script src="/assets/js/components.js" defer></script>
+</head>
+<body class="theme-night">
+  
+  <mcm-navbar></mcm-navbar>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-bg"><div class="hero-gradient"></div></div>
+      <div class="hero-content container">
+        <div class="hero-eyebrow">Delhi · Est. 2019</div>
+        <h1 class="hero-title gsap-reveal">
+          <span class="line">RECORD.</span>
+          <span class="line">CREATE.</span>
+          <span class="line accent">PERFORM.</span>
+        </h1>
+        <p class="hero-sub gsap-fade">Professional recording, mixing, and beat production environment.</p>
+      </div>
+    </section>
+
+    </main>
+
+  <mcm-footer></mcm-footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  
+  <script type="module">
+    import { initEngine } from '/assets/js/engine.js';
+    import { initAnimations } from '/assets/js/animations.js';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      initAnimations(); // Starts GSAP timelines
+    });
+  </script>
+</body>
+</html>
