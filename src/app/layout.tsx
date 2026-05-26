@@ -3,8 +3,8 @@ import { Bebas_Neue, Montserrat } from "next/font/google";
 import Navbar from "@/components/global/Navbar";
 import Footer from "@/components/global/Footer";
 import AudioEngine from "@/components/global/AudioEngine";
+import FloatingCTA from "@/components/global/FloatingCTA";
 
-// CRITICAL: The direct import of your global styles
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({ 
@@ -19,8 +19,8 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Middle Class Musicians — Studio",
-  description: "Delhi's premier recording studio.",
+  title: "Middle Class Musicians — Premium Recording Studio",
+  description: "Delhi's premier studio for Recording, Mixing, Mastering, and Beat Production.",
 };
 
 export default function RootLayout({
@@ -29,13 +29,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${bebasNeue.variable} ${montserrat.variable} font-body bg-bgPrimary text-textPrimary antialiased selection:bg-gold selection:text-black`}>
+    <html lang="en" className="scroll-smooth bg-[#07070a]">
+      <body className={`${bebasNeue.variable} ${montserrat.variable} font-body bg-bgPrimary text-textPrimary antialiased selection:bg-gold selection:text-black min-h-screen flex flex-col`}>
+        {/* Invisible Client Engines */}
         <AudioEngine />
+        
+        {/* Global UI Components */}
         <Navbar />
-        <main className="min-h-screen pt-20">
+        
+        {/* Main Content Area (Expands to push footer down) */}
+        <main className="flex-grow">
           {children}
         </main>
+        
+        <FloatingCTA />
         <Footer />
       </body>
     </html>
