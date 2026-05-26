@@ -17,7 +17,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "error" | "success"; message: string } | null>(null);
 
-  // Safe GSAP Animation (No CSS hidden traps)
   useGSAP(() => {
     gsap.from(".login-anim", {
       y: 30,
@@ -34,34 +33,27 @@ export default function LoginPage() {
     setLoading(true);
     setFeedback(null);
 
-    // Instantiate Supabase safely on form submit
     const supabase = createClient();
 
     try {
       if (isSignUp) {
-        // Registration Flow
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-        });
-        
+        const { error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
-        setFeedback({ type: "success", message: "Registration successful! You can now log in." });
-        setIsSignUp(false); 
-        setPassword("");
+        
+        setFeedback({ type: "success", message: "Account created! Logging you in..." });
+        
+        // Auto-login after successful registration (requires Email Confirmation to be OFF in Supabase)
+        await supabase.auth.signInWithPassword({ email, password });
+        router.push("/blogs");
       } else {
-        // Login Flow
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-        
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        setFeedback({ type: "success", message: "Authenticating..." });
-        router.push("/blogs"); // Redirect back to community
+        
+        setFeedback({ type: "success", message: "Access granted." });
+        router.push("/blogs");
       }
     } catch (error: any) {
-      setFeedback({ type: "error", message: error.message || "Authentication failed." });
+      setFeedback({ type: "error", message: error.message || "Authentication failed. Check your credentials." });
     } finally {
       setLoading(false);
     }
