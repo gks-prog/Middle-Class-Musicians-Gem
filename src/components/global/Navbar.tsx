@@ -20,10 +20,12 @@ export default function Navbar() {
     setIsOpen(false);
   }, [pathname]);
 
+  // THIS IS THE ARRAY THAT WAS UPDATED
   const navLinks = [
     { name: "Studio", path: "/studio" },
     { name: "Services", path: "/services" },
     { name: "Portfolio", path: "/portfolio" },
+    { name: "Blogs", path: "/blogs" },
     { name: "Courses", path: "/courses" },
   ];
 
@@ -41,15 +43,7 @@ export default function Navbar() {
             <span className="text-[#d4a857]">MCM</span>
             <span className="hidden sm:inline-block">STUDIO</span>
           </Link>
-// Inside src/components/global/Navbar.tsx find this array and update it:
 
-const navLinks = [
-  { name: "Studio", path: "/studio" },
-  { name: "Services", path: "/services" },
-  { name: "Portfolio", path: "/portfolio" },
-  { name: "Blogs", path: "/blogs" }, // <-- Added the Blogs link
-  { name: "Courses", path: "/courses" },
-];
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
