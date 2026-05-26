@@ -2,47 +2,70 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Middle Class Musicians — Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   
-  <link rel="stylesheet" href="/assets/css/variables.css" />
-  <link rel="stylesheet" href="/assets/css/global.css" />
-  <link rel="stylesheet" href="/assets/css/components.css" />
+  <title>Middle Class Musicians — Premium Recording Studio</title>
+  <meta name="description" content="Delhi's premier studio for Recording, Mixing, Mastering, and Beat Production." />
   
-  <script src="/assets/js/components.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="style.css" />
+  
+  <script src="components.js" defer></script>
 </head>
 <body class="theme-night">
-  
+
   <mcm-navbar></mcm-navbar>
 
   <main>
     <section class="hero" id="home">
-      <div class="hero-bg"><div class="hero-gradient"></div></div>
+      <div class="hero-bg">
+        <div class="hero-gradient"></div>
+        <div class="hero-grain"></div>
+      </div>
+      
       <div class="hero-content container">
         <div class="hero-eyebrow">Delhi · Est. 2019</div>
-        <h1 class="hero-title gsap-reveal">
-          <span class="line">RECORD.</span>
-          <span class="line">CREATE.</span>
-          <span class="line accent">PERFORM.</span>
+        <h1 class="hero-title">
+          <span class="line gsap-reveal">RECORD.</span>
+          <span class="line gsap-reveal">CREATE.</span>
+          <span class="line accent gsap-reveal">PERFORM.</span>
         </h1>
-        <p class="hero-sub gsap-fade">Professional recording, mixing, and beat production environment.</p>
+        <p class="hero-sub gsap-fade">Professional Recording Studio in Delhi</p>
+        
+        <div class="hero-cta gsap-fade">
+          <a href="https://wa.me/919315778147" target="_blank" class="btn btn-primary" data-sound="hover">Book Now</a>
+          <a href="#studio" class="btn btn-ghost" data-sound="click">View Studio</a>
+        </div>
       </div>
     </section>
 
-    </main>
+    <section class="stats-bar" id="stats">
+      <div class="container">
+        <div class="stats-grid">
+          <div class="stat-item gsap-fade">
+            <h2 class="stat-number">450<span class="accent">+</span></h2>
+            <p>Happy Clients</p>
+          </div>
+          <div class="stat-item gsap-fade">
+            <h2 class="stat-number">7<span class="accent">+</span></h2>
+            <p>Years in Market</p>
+          </div>
+          <div class="stat-item gsap-fade">
+            <h2 class="stat-number">24<span class="accent">/7</span></h2>
+            <p>Helping Artists</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <mcm-footer></mcm-footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  
-  <script type="module">
-    import { initEngine } from '/assets/js/engine.js';
-    import { initAnimations } from '/assets/js/animations.js';
-    
-    document.addEventListener('DOMContentLoaded', () => {
-      initAnimations(); // Starts GSAP timelines
-    });
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
