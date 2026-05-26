@@ -3,15 +3,24 @@ import { Bebas_Neue, Montserrat } from "next/font/google";
 import Navbar from "@/components/global/Navbar";
 import Footer from "@/components/global/Footer";
 import AudioEngine from "@/components/global/AudioEngine";
-import "@/styles/globals.css";
 
-// Optimize Google Fonts at build time
-const bebasNeue = Bebas_Neue({ weight: "400", subsets: ["latin"], variable: "--font-head" });
-const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-body" });
+// CRITICAL: The direct import of your global styles
+import "./globals.css";
+
+const bebasNeue = Bebas_Neue({ 
+  weight: "400", 
+  subsets: ["latin"], 
+  variable: "--font-head" 
+});
+
+const montserrat = Montserrat({ 
+  subsets: ["latin"], 
+  variable: "--font-body" 
+});
 
 export const metadata: Metadata = {
-  title: "Middle Class Musicians — Premium Recording Studio",
-  description: "Delhi's premier studio for Recording, Mixing, Mastering, and Beat Production.",
+  title: "Middle Class Musicians — Studio",
+  description: "Delhi's premier recording studio.",
 };
 
 export default function RootLayout({
@@ -21,10 +30,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${bebasNeue.variable} ${montserrat.variable} font-body bg-black text-white antialiased`}>
-        {/* Invisible client-side engine for haptics and SFX */}
+      <body className={`${bebasNeue.variable} ${montserrat.variable} font-body bg-bgPrimary text-textPrimary antialiased selection:bg-gold selection:text-black`}>
         <AudioEngine />
-        
         <Navbar />
         <main className="min-h-screen pt-20">
           {children}
