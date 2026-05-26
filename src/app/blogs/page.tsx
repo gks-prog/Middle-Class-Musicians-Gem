@@ -6,11 +6,10 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { createClient } from "@/lib/supabase";
 
-// High-converting Q&A Editorial Content
 const editorialContent = [
   {
     category: "For Rappers",
-    question: "Why do my vocals sound 'pasted' on top of the beat instead of inside it?",
+    question: "Why do my vocals sound 'pasted' on top of the beat?",
     answer: "This is the #1 mistake we hear. It happens when you use generic YouTube beats that lack headroom, combined with poor vocal compression. At MCM, we use dynamic EQ carving to create a 'pocket' in the beat's frequency spectrum specifically for your vocal tone, then glue them together with analog-style bus compression. The result is a track that sounds like a single cohesive record, not karaoke."
   },
   {
@@ -22,71 +21,61 @@ const editorialContent = [
     category: "For Rappers",
     question: "How long does a professional recording session actually take?",
     answer: "If you know your lyrics and flow, tracking lead vocals takes 1-2 hours. But a premium record requires ad-libs, harmonies, and dubs. We block our MCM sessions to ensure artists never feel rushed. We handle the technical setup flawlessly so you can focus entirely on your performance and delivery."
-  },
-  {
-    category: "For Producers",
-    question: "Is AI going to replace beatmakers?",
-    answer: "AI will replace beatmakers who only drag-and-drop loops. It will NOT replace producers who understand arrangement, emotion, and vocal production. In the MCM Academy, we teach you how to use AI as an assistant—generating unique samples and manipulating vocals—so you stay ahead of the curve instead of getting replaced by it."
   }
 ];
 
 export default function BlogsPage() {
   const container = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const supabase = createClient();
   
+  const [mounted, setMounted] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<any[]>([
-    // Dummy comments to populate UI until DB is connected
     { id: 1, user_name: "DelhiDrillz", content: "That vocal mixing chain tip saved my latest track. Do you guys use analog gear for the final master?", created_at: new Date().toISOString() },
     { id: 2, user_name: "Vakta", content: "Beginners definitely need to learn basic theory. It cuts workflow time in half.", created_at: new Date().toISOString() }
   ]);
 
-  // Auth Check on Mount
   useEffect(() => {
+    setMounted(true);
     const checkUser = async () => {
+      const supabase = createClient();
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user || null);
     };
     checkUser();
-    
-    // In a production environment, you would fetch real comments here:
-    // const fetchComments = async () => { const { data } = await supabase.from('comments').select('*').order('created_at', { ascending: false }); setComments(data || []); }
   }, []);
 
   useGSAP(() => {
-    gsap.fromTo(".gsap-reveal", 
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" }
-    );
-  }, { scope: container });
+    if (mounted) {
+      gsap.fromTo(".gsap-reveal", 
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" }
+      );
+    }
+  }, { scope: container, dependencies: [mounted] });
 
   const handleCommentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Redirect unauthenticated users
     if (!user) {
       router.push('/auth/login');
       return;
     }
-
     if (!commentText.trim()) return;
 
-    // Optimistic UI update (shows comment immediately)
-    const newComment = { id: Date.now(), user_name: user.email?.split('@')[0] || "Artist", content: commentText, created_at: new Date().toISOString() };
+    const newComment = { 
+      id: Date.now(), 
+      user_name: user.email?.split('@')[0] || "Artist", 
+      content: commentText, 
+      created_at: new Date().toISOString() 
+    };
+    
     setComments([newComment, ...comments]);
     setCommentText("");
-
-    // Send to Supabase (Uncomment when ready)
-    /*
-    await supabase.from('comments').insert([{ 
-      user_id: user.id, 
-      user_name: user.email?.split('@')[0] || "Artist", 
-      content: commentText 
-    }]);
-    */
   };
+
+  // Prevent hydration mismatch by returning a skeleton during SSR
+  if (!mounted) return <div className="min-h-screen bg-[#07070a]" />;
 
   return (
     <div ref={container} className="pt-32 pb-20">
@@ -98,7 +87,7 @@ export default function BlogsPage() {
         <p className="text-gray-400 text-lg gsap-reveal">Direct answers to the most common questions we hear in the studio. Learn the industry standards.</p>
       </section>
 
-      {/* Q&A Cards (Indirect Promotion) */}
+      {/* Q&A Editorial Cards */}
       <section className="container mx-auto px-6 mb-32 max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {editorialContent.map((item, i) => (
@@ -123,24 +112,22 @@ export default function BlogsPage() {
             <textarea 
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Join the discussion..." 
+              placeholder={user ? "Join the discussion..." : "Log in to post a message..."}
               rows={4}
-              className="w-full bg-[#15151c] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#d4a857] transition-colors resize-none"
+              disabled={!user}
+              className="w-full bg-[#15151c] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#d4a857] transition-colors resize-none disabled:opacity-50"
             />
             
-            {/* Auth Gate Overlay - Blurs textarea if not logged in */}
-            {!user && (
-              <div className="absolute inset-0 bg-[#0c0c10]/60 backdrop-blur-[2px] rounded-xl flex items-center justify-center border border-white/5">
+            {!user ? (
+              <div className="absolute inset-0 bg-[#0c0c10]/40 backdrop-blur-[2px] rounded-xl flex items-center justify-center border border-white/5">
                 <button type="button" onClick={() => router.push('/auth/login')} className="px-8 py-3 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-[#d4a857] transition-colors shadow-2xl">
                   Log In To Comment
                 </button>
               </div>
-            )}
-
-            {user && (
-              <div className="flex justify-between items-center">
+            ) : (
+              <div className="flex justify-between items-center mt-2">
                 <span className="text-xs text-[#d4a857] uppercase tracking-widest font-semibold flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-[#25d366] animate-pulse"></span> Authenticated
+                  <span className="w-2 h-2 rounded-full bg-[#25d366] animate-pulse"></span> Authenticated as {user.email?.split('@')[0]}
                 </span>
                 <button type="submit" className="px-8 py-3 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-[#d4a857] transition-colors">
                   Post Message
@@ -150,7 +137,7 @@ export default function BlogsPage() {
           </form>
 
           {/* Render Comments */}
-          <div className="space-y-6">
+          <div className="space-y-6 border-t border-white/5 pt-8">
             {comments.map((c) => (
               <div key={c.id} className="p-6 rounded-2xl bg-[#15151c] border border-white/5">
                 <div className="flex items-center gap-4 mb-3">
