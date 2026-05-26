@@ -4,30 +4,37 @@
 
 @layer base {
   body {
-    @apply bg-bgPrimary text-textPrimary antialiased overflow-x-hidden;
+    @apply bg-[#07070a] text-[#f5f5f7] antialiased overflow-x-hidden selection:bg-[#d4a857] selection:text-black;
   }
 }
 
-/* Base GSAP Classes */
-.gsap-reveal {
-  opacity: 0;
-  visibility: hidden;
+@layer utilities {
+  /* Premium Glowing Effects */
+  .text-glow {
+    text-shadow: 0 0 20px rgba(212, 168, 87, 0.4), 0 0 40px rgba(212, 168, 87, 0.1);
+  }
+  .box-glow {
+    box-shadow: 0 0 30px rgba(212, 168, 87, 0.1);
+  }
+  .box-glow-hover:hover {
+    box-shadow: 0 10px 40px rgba(212, 168, 87, 0.25);
+  }
 }
 
-.gsap-fade {
-  opacity: 0;
-}
+/* GSAP Base States */
+.gsap-reveal { opacity: 0; visibility: hidden; }
+.hero-text-line { transform-origin: left bottom; }
 
-/* Scrollbar Styling for Premium Feel */
+/* Custom Dark Luxury Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #07070a;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a35;
-  border-radius: 4px;
+  background: #1a1a24;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #d4a857;
