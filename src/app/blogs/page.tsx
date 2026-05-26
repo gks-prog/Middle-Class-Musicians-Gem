@@ -10,12 +10,12 @@ const editorialContent = [
   {
     category: "For Rappers",
     question: "Why do my vocals sound 'pasted' on top of the beat?",
-    answer: "This is the #1 mistake we hear. It happens when you use generic YouTube beats that lack headroom, combined with poor vocal compression. At MCM, we use dynamic EQ carving to create a 'pocket' in the beat's frequency spectrum specifically for your vocal tone, then glue them together with analog-style bus compression. The result is a track that sounds like a single cohesive record, not karaoke."
+    answer: "This is the #1 mistake we hear. It happens when you use generic YouTube beats that lack headroom, combined with poor vocal compression. At MCM, we use dynamic EQ carving to create a 'pocket' in the beat's frequency spectrum specifically for your vocal tone, then glue them together with analog bus compression. The result is a track that sounds like a cohesive record, not karaoke."
   },
   {
     category: "For Producers",
-    question: "Are expensive plugins actually necessary to make industry-standard beats?",
-    answer: "No. Stock plugins can get you 90% there if your sound selection is elite. However, what separates bedroom beats from billboard records is acoustic treatment and monitoring. You can't mix what you can't hear. Our MCM control room is acoustically calibrated so you hear the absolute truth of your low-end—meaning your 808s will knock exactly the same in a car, a club, or on AirPods."
+    question: "Are expensive plugins necessary for industry-standard beats?",
+    answer: "No. Stock plugins can get you 90% there if your sound selection is elite. However, what separates bedroom beats from billboard records is acoustic treatment. You can't mix what you can't hear. Our MCM control room is acoustically calibrated so you hear the absolute truth of your low-end—meaning your 808s will knock exactly the same in a car or on AirPods."
   },
   {
     category: "For Artists",
@@ -27,25 +27,26 @@ const editorialContent = [
 export default function BlogsPage() {
   const container = useRef<HTMLDivElement>(null);
   const router = useRouter();
-  const supabase = createClient();
   
   const [user, setUser] = useState<any>(null);
   const [commentText, setCommentText] = useState("");
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   
-  // Dummy comments pre-loaded
+  // Dummy comments pre-loaded for the community feel
   const [comments, setComments] = useState<any[]>([
     { id: 1, user_name: "DelhiDrillz", content: "That vocal mixing chain tip saved my latest track. Do you guys use analog gear for the final master?", created_at: new Date().toISOString() },
     { id: 2, user_name: "Vakta", content: "Beginners definitely need to learn basic theory. It cuts workflow time in half.", created_at: new Date().toISOString() }
   ]);
 
+  // 1. Safe Client-Side Auth Check
   useEffect(() => {
     const checkUser = async () => {
       try {
+        const supabase = createClient();
         const { data: { session } } = await supabase.auth.getSession();
         setUser(session?.user || null);
       } catch (error) {
-        console.error("Supabase connection skipped due to env var setup.");
+        console.warn("Supabase auth check skipped. Ensure env variables are set.");
       } finally {
         setIsAuthLoading(false);
       }
@@ -53,11 +54,16 @@ export default function BlogsPage() {
     checkUser();
   }, []);
 
+  // 2. Safe GSAP Animation (No CSS hidden traps)
   useGSAP(() => {
-    gsap.fromTo(".gsap-reveal", 
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" }
-    );
+    gsap.from(".blog-anim", {
+      y: 40,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.1,
+      ease: "power3.out",
+      clearProps: "all" // Cleans up inline styles after animation
+    });
   }, { scope: container });
 
   const handleCommentSubmit = (e: React.FormEvent) => {
@@ -70,6 +76,7 @@ export default function BlogsPage() {
     
     if (!commentText.trim()) return;
 
+    // Optimistic UI Update
     const newComment = { 
       id: Date.now(), 
       user_name: user.email?.split('@')[0] || "Artist", 
@@ -82,20 +89,20 @@ export default function BlogsPage() {
   };
 
   return (
-    <div ref={container} className="pt-32 pb-32">
+    <div ref={container} className="pt-32 pb-32 min-h-screen">
       
-      {/* 1. Header */}
+      {/* Header */}
       <section className="container mx-auto px-6 mb-24 text-center max-w-3xl">
-        <span className="text-[#d4a857] font-head tracking-[0.2em] uppercase text-sm block mb-4 gsap-reveal">Insights & Knowledge</span>
-        <h1 className="text-5xl md:text-7xl font-head leading-none mb-6 gsap-reveal">The MCM <span className="text-[#d4a857]">Journal.</span></h1>
-        <p className="text-gray-400 text-lg gsap-reveal">Direct answers to the most common questions we hear in the studio. Learn the industry standards.</p>
+        <span className="text-[#d4a857] font-head tracking-[0.2em] uppercase text-sm block mb-4 blog-anim">Insights & Knowledge</span>
+        <h1 className="text-5xl md:text-7xl font-head leading-none mb-6 blog-anim">The MCM <span className="text-[#d4a857]">Journal.</span></h1>
+        <p className="text-gray-400 text-lg blog-anim">Direct answers to the most common questions we hear in the studio. Learn the industry standards.</p>
       </section>
 
-      {/* 2. Editorial Q&A Cards */}
+      {/* Editorial Q&A Cards */}
       <section className="container mx-auto px-6 mb-32 max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {editorialContent.map((item, i) => (
-            <div key={i} className="gsap-reveal group p-8 md:p-10 rounded-3xl bg-[#15151c] border border-white/5 hover:border-[#d4a857]/30 transition-colors">
+            <div key={i} className="blog-anim group p-8 md:p-10 rounded-3xl bg-[#15151c] border border-white/5 hover:border-[#d4a857]/30 transition-colors">
               <span className="inline-block px-3 py-1 bg-[#07070a] border border-white/10 rounded text-[10px] font-bold uppercase tracking-widest text-[#d4a857] mb-6">
                 {item.category}
               </span>
@@ -106,9 +113,9 @@ export default function BlogsPage() {
         </div>
       </section>
 
-      {/* 3. Interactive Community Section */}
+      {/* Interactive Community Section */}
       <section className="container mx-auto px-6 max-w-4xl">
-        <div className="gsap-reveal bg-[#0c0c10] border border-white/10 rounded-[2rem] p-8 md:p-12 shadow-xl">
+        <div className="blog-anim bg-[#0c0c10] border border-white/10 rounded-[2rem] p-8 md:p-12 shadow-xl">
           <h3 className="text-3xl font-head mb-2 text-[#d4a857]">Studio Talk</h3>
           <p className="text-gray-400 text-sm mb-10">Ask a production question, debate a mix, or drop feedback. The MCM community is active here.</p>
           
@@ -164,7 +171,6 @@ export default function BlogsPage() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }
