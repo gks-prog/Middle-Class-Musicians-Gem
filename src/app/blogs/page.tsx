@@ -2,27 +2,10 @@
 
 import { useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { createClient } from "@/lib/supabase";
-
-const editorialContent = [
-  {
-    category: "For Rappers",
-    question: "Why do my vocals sound 'pasted' on top of the beat?",
-    answer: "This is the #1 mistake we hear. It happens when you use generic YouTube beats that lack headroom, combined with poor vocal compression. At MCM, we use dynamic EQ carving to create a 'pocket' in the beat's frequency spectrum specifically for your vocal tone, then glue them together with analog bus compression. The result is a track that sounds like a cohesive record, not karaoke."
-  },
-  {
-    category: "For Producers",
-    question: "Are expensive plugins necessary for industry-standard beats?",
-    answer: "No. Stock plugins can get you 90% there if your sound selection is elite. However, what separates bedroom beats from billboard records is acoustic treatment. You can't mix what you can't hear. Our MCM control room is acoustically calibrated so you hear the absolute truth of your low-end—meaning your 808s will knock exactly the same in a car or on AirPods."
-  },
-  {
-    category: "For Artists",
-    question: "How long does a professional recording session actually take?",
-    answer: "If you know your lyrics and flow, tracking lead vocals takes 1-2 hours. But a premium record requires ad-libs, harmonies, and dubs. We block our MCM sessions to ensure artists never feel rushed. We handle the technical setup flawlessly so you can focus entirely on your performance and delivery."
-  }
-];
 
 export default function BlogsPage() {
   const container = useRef<HTMLDivElement>(null);
@@ -32,13 +15,11 @@ export default function BlogsPage() {
   const [commentText, setCommentText] = useState("");
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   
-  // Dummy comments pre-loaded for the community feel
   const [comments, setComments] = useState<any[]>([
     { id: 1, user_name: "DelhiDrillz", content: "That vocal mixing chain tip saved my latest track. Do you guys use analog gear for the final master?", created_at: new Date().toISOString() },
     { id: 2, user_name: "Vakta", content: "Beginners definitely need to learn basic theory. It cuts workflow time in half.", created_at: new Date().toISOString() }
   ]);
 
-  // 1. Safe Client-Side Auth Check
   useEffect(() => {
     const checkUser = async () => {
       try {
@@ -46,7 +27,7 @@ export default function BlogsPage() {
         const { data: { session } } = await supabase.auth.getSession();
         setUser(session?.user || null);
       } catch (error) {
-        console.warn("Supabase auth check skipped. Ensure env variables are set.");
+        console.warn("Supabase auth check skipped.");
       } finally {
         setIsAuthLoading(false);
       }
@@ -54,29 +35,17 @@ export default function BlogsPage() {
     checkUser();
   }, []);
 
-  // 2. Safe GSAP Animation (No CSS hidden traps)
   useGSAP(() => {
     gsap.from(".blog-anim", {
-      y: 40,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.1,
-      ease: "power3.out",
-      clearProps: "all" // Cleans up inline styles after animation
+      y: 40, opacity: 0, duration: 1, stagger: 0.1, ease: "power3.out", clearProps: "all"
     });
   }, { scope: container });
 
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!user) {
-      router.push('/auth/login');
-      return;
-    }
-    
+    if (!user) return router.push('/auth/login');
     if (!commentText.trim()) return;
 
-    // Optimistic UI Update
     const newComment = { 
       id: Date.now(), 
       user_name: user.email?.split('@')[0] || "Artist", 
@@ -95,29 +64,37 @@ export default function BlogsPage() {
       <section className="container mx-auto px-6 mb-24 text-center max-w-3xl">
         <span className="text-[#d4a857] font-head tracking-[0.2em] uppercase text-sm block mb-4 blog-anim">Insights & Knowledge</span>
         <h1 className="text-5xl md:text-7xl font-head leading-none mb-6 blog-anim">The MCM <span className="text-[#d4a857]">Journal.</span></h1>
-        <p className="text-gray-400 text-lg blog-anim">Direct answers to the most common questions we hear in the studio. Learn the industry standards.</p>
+        <p className="text-gray-400 text-lg blog-anim">Select a discipline to access specialized industry insights, or drop into the studio discussion below.</p>
       </section>
 
-      {/* Editorial Q&A Cards */}
+      {/* Directory Routing */}
       <section className="container mx-auto px-6 mb-32 max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {editorialContent.map((item, i) => (
-            <div key={i} className="blog-anim group p-8 md:p-10 rounded-3xl bg-[#15151c] border border-white/5 hover:border-[#d4a857]/30 transition-colors">
-              <span className="inline-block px-3 py-1 bg-[#07070a] border border-white/10 rounded text-[10px] font-bold uppercase tracking-widest text-[#d4a857] mb-6">
-                {item.category}
-              </span>
-              <h3 className="text-2xl font-head mb-4 text-white leading-tight">{item.question}</h3>
-              <p className="text-gray-400 text-sm leading-relaxed">{item.answer}</p>
-            </div>
-          ))}
+          <Link href="/blogs/rappers" className="blog-anim group block p-10 rounded-3xl bg-[#15151c] border border-white/5 hover:border-[#d4a857]/50 transition-all">
+            <span className="inline-block px-3 py-1 bg-black border border-white/10 rounded text-[10px] font-bold uppercase tracking-widest text-[#d4a857] mb-6 group-hover:bg-[#d4a857] group-hover:text-black transition-colors">
+              Discipline
+            </span>
+            <h3 className="text-4xl font-head mb-4 text-white group-hover:text-[#d4a857] transition-colors">For Rappers</h3>
+            <p className="text-gray-400 text-sm leading-relaxed mb-8">Vocal pacing, overcoming recording anxiety, achieving the 'glued' mix sound, and studio etiquette.</p>
+            <span className="text-xs uppercase tracking-widest font-bold text-white/50 group-hover:text-white transition-colors">Read Articles →</span>
+          </Link>
+
+          <Link href="/blogs/producers" className="blog-anim group block p-10 rounded-3xl bg-[#15151c] border border-white/5 hover:border-[#d4a857]/50 transition-all">
+            <span className="inline-block px-3 py-1 bg-black border border-white/10 rounded text-[10px] font-bold uppercase tracking-widest text-[#d4a857] mb-6 group-hover:bg-[#d4a857] group-hover:text-black transition-colors">
+              Discipline
+            </span>
+            <h3 className="text-4xl font-head mb-4 text-white group-hover:text-[#d4a857] transition-colors">For Producers</h3>
+            <p className="text-gray-400 text-sm leading-relaxed mb-8">Low-end theory, acoustic treatment truths, plugin myths, and structuring beats for placements.</p>
+            <span className="text-xs uppercase tracking-widest font-bold text-white/50 group-hover:text-white transition-colors">Read Articles →</span>
+          </Link>
         </div>
       </section>
 
-      {/* Interactive Community Section */}
+      {/* Community Section */}
       <section className="container mx-auto px-6 max-w-4xl">
         <div className="blog-anim bg-[#0c0c10] border border-white/10 rounded-[2rem] p-8 md:p-12 shadow-xl">
           <h3 className="text-3xl font-head mb-2 text-[#d4a857]">Studio Talk</h3>
-          <p className="text-gray-400 text-sm mb-10">Ask a production question, debate a mix, or drop feedback. The MCM community is active here.</p>
+          <p className="text-gray-400 text-sm mb-10">Ask a production question, debate a mix, or drop feedback.</p>
           
           <form onSubmit={handleCommentSubmit} className="mb-12 flex flex-col gap-4 relative">
             <textarea 
@@ -129,7 +106,6 @@ export default function BlogsPage() {
               className="w-full bg-[#15151c] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#d4a857] transition-colors resize-none disabled:opacity-50"
             />
             
-            {/* Conditional Auth Gate */}
             {!isAuthLoading && !user && (
               <div className="absolute inset-0 bg-[#0c0c10]/40 backdrop-blur-[2px] rounded-xl flex items-center justify-center border border-white/5">
                 <button type="button" onClick={() => router.push('/auth/login')} className="px-8 py-3 bg-white text-black font-bold text-xs uppercase tracking-widest rounded-lg hover:bg-[#d4a857] transition-colors shadow-2xl">
