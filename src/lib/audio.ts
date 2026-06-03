@@ -36,7 +36,7 @@ export const playSFX = (type: "hover" | "click" | "note" | "riser", freqBase = 4
     gain.gain.linearRampToValueAtTime(0.08, audioCtx.currentTime + 0.05);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2.0);
   } else if (type === "riser") {
-    // Deep Cinematic Sub-Riser
+    // Deep Cinematic Sub-Riser for the Preloader
     osc.type = "sawtooth";
     osc.frequency.setValueAtTime(30, audioCtx.currentTime);
     osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 3.0);
