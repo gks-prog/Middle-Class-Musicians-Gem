@@ -3,6 +3,8 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import StructuredData from "@/components/global/StructuredData";
+import { siteConfig } from "@/lib/site";
 
 export default function CoursesPage() {
   const container = useRef<HTMLDivElement>(null);
@@ -48,11 +50,30 @@ export default function CoursesPage() {
 
   return (
     <div ref={container} className="pt-32 pb-20 container mx-auto px-6">
+      <StructuredData data={courses.map((course) => ({
+        "@context": "https://schema.org",
+        "@type": "Course",
+        name: course.title,
+        description: course.desc,
+        provider: {
+          "@type": "Organization",
+          name: "MCM Academy",
+          sameAs: siteConfig.url,
+        },
+        timeRequired: `P${course.duration.split(" ")[0]}M`,
+        offers: {
+          "@type": "Offer",
+          priceCurrency: "INR",
+          price: course.price.replace(/[^0-9]/g, ""),
+          availability: "https://schema.org/InStock",
+          url: `${siteConfig.url}/courses`,
+        },
+      }))} />
       
       <div className="text-center mb-24 max-w-3xl mx-auto">
         <span className="text-[#d4a857] font-head tracking-[0.2em] uppercase text-sm block mb-4 gsap-reveal">MCM Academy</span>
         <h1 className="text-5xl md:text-7xl font-head leading-none mb-6 gsap-reveal">Master Your <span className="text-[#d4a857]">Craft.</span></h1>
-        <p className="text-gray-400 text-lg gsap-reveal">Stop relying on YouTube tutorials. Learn the exact frameworks we use to produce records in a multi-million stream industry.</p>
+        <p className="text-gray-400 text-lg gsap-reveal">Build a structured production workflow with guided practice, direct feedback, and modules organised around complete records—not disconnected tutorials.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -87,6 +108,10 @@ export default function CoursesPage() {
           </div>
         ))}
       </div>
+
+      <p className="mx-auto mt-10 max-w-3xl text-center text-xs leading-6 text-gray-500">
+        Course fees and modules shown here are the current website listing. Confirm the next batch, schedule, seat availability, and payment terms with MCM Academy before enrolling.
+      </p>
     </div>
   );
 }

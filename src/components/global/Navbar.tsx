@@ -1,8 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SoundToggle from "./SoundToggle";
+import AuthNav from "./AuthNav";
+import { siteConfig } from "@/lib/site";
+
+const navLinks = [
+  { name: "Studio", path: "/studio" },
+  { name: "Services", path: "/services" },
+  { name: "Portfolio", path: "/portfolio" },
+  { name: "Blogs", path: "/blogs" },
+  { name: "Courses", path: "/courses" },
+];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -10,102 +21,125 @@ export default function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 30);
+    const handleScroll = () => setScrolled(window.scrollY > 24);
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => setIsOpen(false), [pathname]);
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "";
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    window.addEventListener("keydown", handleEscape);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen]);
 
-  const navLinks = [
-    { name: "Studio", path: "/studio" },
-    { name: "Services", path: "/services" },
-    { name: "Portfolio", path: "/portfolio" },
-    { name: "Blogs", path: "/blogs" },
-    { name: "Courses", path: "/courses" },
-  ];
+  const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
   return (
     <>
       <header
-        className={`fixed top-0 w-full z-50 transition-all duration-500 ease-out ${
+        className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${
           scrolled || isOpen
-            ? "bg-[#07070a]/80 backdrop-blur-xl border-b border-white/5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
-            : "bg-transparent py-6"
+            ? "border-white/5 bg-[#07070a]/90 py-3 shadow-[0_10px_30px_rgba(0,0,0,0.45)] backdrop-blur-xl"
+            : "border-transparent bg-gradient-to-b from-black/45 to-transparent py-5"
         }`}
       >
-        <div className="container mx-auto px-6 md:px-12 flex items-center justify-between">
-          <Link href="/" className="font-head text-2xl tracking-widest flex items-center gap-2 relative z-50 group" data-sound="hover">
-            <span className="text-[#d4a857] group-hover:text-glow transition-all duration-300">MCM</span>
-            <span className="hidden sm:inline-block text-white/90">STUDIO</span>
+        <div className="container mx-auto flex items-center justify-between gap-5 px-5 sm:px-6 md:px-10">
+          <Link
+            href="/"
+            className="group relative z-50 flex min-h-11 items-center gap-2 font-head text-2xl tracking-widest"
+            data-sound="hover"
+            aria-label="Middle Class Musicians home"
+          >
+            <span className="text-[#d4a857] transition group-hover:text-glow">MCM</span>
+            <span className="hidden text-white/90 sm:inline">Studio</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden items-center gap-5 lg:flex xl:gap-7" aria-label="Primary navigation">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.path}
                 data-sound="hover"
-                className={`text-sm uppercase tracking-widest transition-all duration-300 hover:-translate-y-0.5 ${
-                  pathname === link.path 
-                    ? "text-white font-bold text-glow" 
-                    : "text-[#a1a1aa] hover:text-white"
+                aria-current={isActive(link.path) ? "page" : undefined}
+                className={`relative flex min-h-11 items-center text-[11px] font-bold uppercase tracking-[0.16em] transition hover:text-white ${
+                  isActive(link.path) ? "text-white after:absolute after:inset-x-0 after:bottom-1 after:h-px after:bg-[#d4a857]" : "text-[#a1a1aa]"
                 }`}
               >
                 {link.name}
               </Link>
             ))}
-            <Link 
-              href="/auth/login" 
-              data-sound="hover"
-              className="text-sm uppercase tracking-widest font-bold text-[#d4a857] hover:text-white hover:text-glow transition-all duration-300 hover:-translate-y-0.5"
-            >
-              Client Portal
-            </Link>
+            <AuthNav />
           </nav>
 
-          <a
-            href="https://wa.me/919315778147"
-            target="_blank"
-            rel="noopener noreferrer"
-            data-sound="click"
-            className="hidden lg:inline-flex items-center justify-center px-7 py-2.5 rounded-full bg-white text-black font-head tracking-wider text-lg hover:bg-[#d4a857] hover:scale-105 transition-all duration-300 shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(212,168,87,0.6)]"
-          >
-            Book Session
-          </a>
+          <div className="relative z-50 flex items-center gap-2">
+            <div className="hidden lg:block">
+              <SoundToggle compact />
+            </div>
+            <a
+              href={`${siteConfig.whatsapp}?text=Hi%20MCM%2C%20I%20want%20to%20book%20a%20studio%20session.`}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-sound="click"
+              className="hidden min-h-11 items-center justify-center rounded-full bg-white px-6 font-head text-base tracking-wider text-black transition hover:scale-[1.03] hover:bg-[#d4a857] xl:inline-flex"
+            >
+              Book Session
+            </a>
 
-          <button 
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden flex flex-col gap-1.5 p-2 relative z-50 group" 
-            aria-label="Toggle Menu"
-            data-sound="click"
-          >
-            <span className={`w-6 h-[2px] bg-white block transition-all duration-300 ease-out group-hover:bg-[#d4a857] ${isOpen ? "translate-y-[8px] rotate-45" : ""}`}></span>
-            <span className={`w-6 h-[2px] bg-white block transition-all duration-300 ease-out group-hover:bg-[#d4a857] ${isOpen ? "opacity-0" : ""}`}></span>
-            <span className={`w-6 h-[2px] bg-white block transition-all duration-300 ease-out group-hover:bg-[#d4a857] ${isOpen ? "-translate-y-[8px] -rotate-45" : ""}`}></span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setIsOpen((open) => !open)}
+              className="group flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-full border border-white/10 lg:hidden"
+              aria-label={isOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isOpen}
+              aria-controls="mobile-navigation"
+              data-sound="click"
+            >
+              <span className={`block h-0.5 w-5 bg-white transition ${isOpen ? "translate-y-2 rotate-45" : ""}`} />
+              <span className={`block h-0.5 w-5 bg-white transition ${isOpen ? "opacity-0" : ""}`} />
+              <span className={`block h-0.5 w-5 bg-white transition ${isOpen ? "-translate-y-2 -rotate-45" : ""}`} />
+            </button>
+          </div>
         </div>
       </header>
 
-      <div 
-        className={`fixed inset-0 bg-[#07070a]/95 backdrop-blur-3xl z-40 flex flex-col items-center justify-center transition-all duration-700 ease-out ${
-          isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+      <div
+        id="mobile-navigation"
+        className={`fixed inset-0 z-40 overflow-y-auto bg-[#07070a]/98 px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-28 backdrop-blur-3xl transition duration-300 lg:hidden ${
+          isOpen ? "visible opacity-100" : "invisible pointer-events-none opacity-0"
         }`}
       >
-        <nav className="flex flex-col items-center gap-8">
-          {navLinks.map((link) => (
+        <nav className="mx-auto flex min-h-full max-w-md flex-col justify-center gap-2" aria-label="Mobile navigation">
+          {navLinks.map((link, index) => (
             <Link
               key={link.name}
               href={link.path}
-              data-sound="hover"
-              className="text-4xl font-head tracking-widest uppercase text-gray-400 hover:text-white hover:scale-110 hover:text-glow transition-all duration-300"
+              onClick={() => setIsOpen(false)}
+              aria-current={isActive(link.path) ? "page" : undefined}
+              className={`flex min-h-14 items-center justify-between border-b border-white/5 py-3 font-head text-4xl uppercase tracking-widest transition ${
+                isActive(link.path) ? "text-[#d4a857]" : "text-gray-300 hover:text-white"
+              }`}
             >
-              {link.name}
+              <span>{link.name}</span>
+              <span className="font-body text-[10px] tracking-widest text-gray-600">0{index + 1}</span>
             </Link>
           ))}
-          <Link href="/auth/login" data-sound="hover" className="text-4xl font-head tracking-widest uppercase text-[#d4a857] mt-4 hover:text-glow hover:scale-110 transition-all duration-300">
-            Client Portal
-          </Link>
+          <AuthNav mobile onNavigate={() => setIsOpen(false)} />
+          <a
+            href={`${siteConfig.whatsapp}?text=Hi%20MCM%2C%20I%20want%20to%20book%20a%20studio%20session.`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="button-primary mt-6 w-full"
+          >
+            Book a Session
+          </a>
+          <div className="mt-4 flex justify-center"><SoundToggle /></div>
         </nav>
       </div>
     </>

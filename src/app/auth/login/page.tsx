@@ -1,132 +1,155 @@
 "use client";
 
 import { useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase";
+
+type Mode = "login" | "signup" | "forgot";
+type OtpPurpose = "login" | "signup";
+type Feedback = { type: "error" | "success"; message: string } | null;
+
+function safeDestination() {
+  const next = new URLSearchParams(window.location.search).get("next");
+  return next?.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
+}
 
 export default function LoginPage() {
   const container = useRef<HTMLDivElement>(null);
   const router = useRouter();
-
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [mode, setMode] = useState<Mode>("login");
+  const [otpPurpose, setOtpPurpose] = useState<OtpPurpose | null>(null);
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState<{ type: "error" | "success"; message: string } | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [feedback, setFeedback] = useState<Feedback>(null);
 
   useGSAP(() => {
-    gsap.from(".login-anim", {
-      y: 30,
-      opacity: 0,
-      duration: 1,
-      stagger: 0.1,
-      ease: "power3.out",
-      clearProps: "all"
-    });
+    gsap.from(".login-anim", { y: 24, opacity: 0, duration: 0.75, stagger: 0.08, ease: "power3.out", clearProps: "all" });
   }, { scope: container });
 
-  const handleAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const beginAuthentication = async (event: React.FormEvent) => {
+    event.preventDefault();
     setLoading(true);
     setFeedback(null);
-
     const supabase = createClient();
 
     try {
-      if (isSignUp) {
-        const { error } = await supabase.auth.signUp({ email, password });
+      if (mode === "forgot") {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/auth/update-password` });
         if (error) throw error;
-        
-        setFeedback({ type: "success", message: "Account created! Logging you in..." });
-        
-        // Auto-login after successful registration (requires Email Confirmation to be OFF in Supabase)
-        await supabase.auth.signInWithPassword({ email, password });
-        router.push("/blogs");
-      } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        
-        setFeedback({ type: "success", message: "Access granted." });
-        router.push("/blogs");
+        setFeedback({ type: "success", message: "Password reset link sent. Check your inbox and spam folder." });
+        return;
       }
-    } catch (error: any) {
-      setFeedback({ type: "error", message: error.message || "Authentication failed. Check your credentials." });
+
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { display_name: displayName.trim() } } });
+        if (error) throw error;
+        if (data.session) {
+          await supabase.auth.signOut({ scope: "local" });
+          const { error: otpError } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+          if (otpError) throw otpError;
+          setOtpPurpose("login");
+        } else {
+          setOtpPurpose("signup");
+        }
+        setFeedback({ type: "success", message: "We sent a six-digit confirmation code to your email." });
+        return;
+      }
+
+      const { error: passwordError } = await supabase.auth.signInWithPassword({ email, password });
+      if (passwordError) throw passwordError;
+      await supabase.auth.signOut({ scope: "local" });
+      const { error: otpError } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+      if (otpError) throw otpError;
+      setOtpPurpose("login");
+      setFeedback({ type: "success", message: "Password accepted. Enter the code sent to your email." });
+    } catch (error: unknown) {
+      setFeedback({ type: "error", message: error instanceof Error ? error.message : "Authentication failed. Please try again." });
     } finally {
       setLoading(false);
     }
   };
 
+  const verifyOtp = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!otpPurpose) return;
+    setLoading(true);
+    setFeedback(null);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.verifyOtp({ email, token: otp, type: otpPurpose === "signup" ? "signup" : "email" });
+      if (error) throw error;
+      setFeedback({ type: "success", message: "Email verified. Opening your dashboard…" });
+      router.replace(safeDestination());
+      router.refresh();
+    } catch (error: unknown) {
+      setFeedback({ type: "error", message: error instanceof Error ? error.message : "That code is invalid or expired." });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resendOtp = async () => {
+    if (!otpPurpose) return;
+    setLoading(true);
+    setFeedback(null);
+    try {
+      const supabase = createClient();
+      const result = otpPurpose === "signup"
+        ? await supabase.auth.resend({ type: "signup", email })
+        : await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+      if (result.error) throw result.error;
+      setFeedback({ type: "success", message: "A fresh code has been sent." });
+    } catch (error: unknown) {
+      setFeedback({ type: "error", message: error instanceof Error ? error.message : "The code could not be resent." });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const changeMode = (nextMode: Mode) => {
+    setMode(nextMode);
+    setOtpPurpose(null);
+    setOtp("");
+    setFeedback(null);
+  };
+
   return (
-    <div ref={container} className="min-h-screen flex items-center justify-center pt-20 px-6 pb-32">
-      <div className="w-full max-w-md p-10 rounded-3xl bg-[#15151c] border border-white/10 relative overflow-hidden shadow-2xl">
-        <div className="absolute top-0 right-0 w-[300px] h-[300px] bg-[#d4a857]/10 blur-[80px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/3" />
-        
-        <div className="relative z-10 text-center mb-10 login-anim">
-          <Link href="/" className="inline-block font-head text-3xl tracking-widest mb-2">
-            <span className="text-[#d4a857]">MCM</span> PORTAL
-          </Link>
-          <p className="text-gray-400 text-sm">
-            {isSignUp ? "Create an account to join the community." : "Sign in to access the studio community."}
-          </p>
+    <div ref={container} className="flex min-h-screen items-center justify-center px-5 pb-32 pt-28">
+      <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-white/10 bg-[#15151c] p-7 shadow-2xl sm:p-10">
+        <div className="pointer-events-none absolute right-0 top-0 h-[300px] w-[300px] -translate-y-1/2 translate-x-1/3 rounded-full bg-[#d4a857]/10 blur-[80px]" />
+        <div className="login-anim relative z-10 mb-8 text-center">
+          <Link href="/" className="mb-2 inline-block font-head text-3xl tracking-widest"><span className="text-[#d4a857]">MCM</span> LOGIN</Link>
+          <p className="text-sm text-gray-400">{otpPurpose ? "Confirm it’s really you." : mode === "signup" ? "Create your studio account." : mode === "forgot" ? "Recover access securely." : "Access bookings, purchases and Studio Talk."}</p>
         </div>
+        {feedback && <div role={feedback.type === "error" ? "alert" : "status"} className={`relative z-10 mb-6 rounded-xl border p-4 text-sm ${feedback.type === "error" ? "border-red-500/40 bg-red-500/10 text-red-300" : "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"}`}>{feedback.message}</div>}
 
-        {feedback && (
-          <div className={`relative z-10 p-4 mb-6 rounded-xl text-sm font-semibold tracking-wide border ${
-            feedback.type === "error" ? "bg-red-500/10 border-red-500/50 text-red-400" : "bg-green-500/10 border-green-500/50 text-green-400"
-          }`}>
-            {feedback.message}
-          </div>
+        {otpPurpose ? (
+          <form onSubmit={verifyOtp} className="login-anim relative z-10 flex flex-col gap-5">
+            <div>
+              <label htmlFor="login-otp" className="mb-2 block font-head text-xs uppercase tracking-widest text-gray-400">Email code</label>
+              <input id="login-otp" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} required value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))} placeholder="000000" className="w-full rounded-xl border border-white/10 bg-[#07070a] p-4 text-center font-head text-3xl tracking-[0.35em] text-white outline-none transition focus:border-[#d4a857]" />
+              <p className="mt-2 text-xs text-gray-500">Sent to {email}. Codes expire for your security.</p>
+            </div>
+            <button type="submit" disabled={loading || otp.length !== 6} className="w-full rounded-xl bg-white py-4 text-xs font-bold uppercase tracking-widest text-black transition hover:bg-[#d4a857] disabled:opacity-40">{loading ? "Verifying…" : "Verify & continue"}</button>
+            <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest"><button type="button" onClick={() => changeMode(otpPurpose === "signup" ? "signup" : "login")} className="text-gray-500 hover:text-white">Back</button><button type="button" onClick={resendOtp} disabled={loading} className="text-[#d4a857] hover:text-white disabled:opacity-40">Resend code</button></div>
+          </form>
+        ) : (
+          <form onSubmit={beginAuthentication} className="login-anim relative z-10 flex flex-col gap-5">
+            {mode === "signup" && <div><label htmlFor="display-name" className="mb-2 block font-head text-xs uppercase tracking-widest text-gray-400">Name</label><input id="display-name" value={displayName} onChange={(event) => setDisplayName(event.target.value)} required maxLength={80} autoComplete="name" placeholder="Your artist name" className="w-full rounded-xl border border-white/10 bg-[#07070a] p-4 text-white outline-none transition focus:border-[#d4a857]" /></div>}
+            <div><label htmlFor="login-email" className="mb-2 block font-head text-xs uppercase tracking-widest text-gray-400">Email</label><input id="login-email" type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="artist@domain.com" className="w-full rounded-xl border border-white/10 bg-[#07070a] p-4 text-white outline-none transition focus:border-[#d4a857]" /></div>
+            {mode !== "forgot" && <div><div className="mb-2 flex items-center justify-between"><label htmlFor="login-password" className="font-head text-xs uppercase tracking-widest text-gray-400">Password</label>{mode === "login" && <button type="button" onClick={() => changeMode("forgot")} className="text-[10px] font-bold uppercase tracking-widest text-[#d4a857] hover:text-white">Forgot password?</button>}</div><div className="relative"><input id="login-password" type={showPassword ? "text" : "password"} required autoComplete={mode === "signup" ? "new-password" : "current-password"} value={password} onChange={(event) => setPassword(event.target.value)} minLength={6} placeholder="••••••••" className="w-full rounded-xl border border-white/10 bg-[#07070a] p-4 pr-20 text-white outline-none transition focus:border-[#d4a857]" /><button type="button" onClick={() => setShowPassword((show) => !show)} className="absolute inset-y-0 right-0 px-4 text-[9px] font-bold uppercase tracking-widest text-gray-500 hover:text-white" aria-label={`${showPassword ? "Hide" : "Show"} password`}>{showPassword ? "Hide" : "Show"}</button></div></div>}
+            <button type="submit" disabled={loading} className="mt-2 w-full rounded-xl bg-white py-4 text-xs font-bold uppercase tracking-widest text-black transition hover:bg-[#d4a857] disabled:opacity-50">{loading ? "Processing…" : mode === "signup" ? "Create account" : mode === "forgot" ? "Send reset link" : "Continue securely"}</button>
+            {mode === "login" && <p className="text-center text-[10px] leading-relaxed text-gray-500">Your password is checked first, then a one-time email code confirms the login.</p>}
+          </form>
         )}
-
-        <form onSubmit={handleAuth} className="relative z-10 flex flex-col gap-5 login-anim">
-          <div>
-            <label className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Email</label>
-            <input 
-              type="email" 
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="artist@domain.com" 
-              className="w-full bg-[#07070a] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#d4a857] transition-colors" 
-            />
-          </div>
-          <div>
-            <label className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Password</label>
-            <input 
-              type="password" 
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••" 
-              minLength={6}
-              className="w-full bg-[#07070a] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#d4a857] transition-colors" 
-            />
-          </div>
-          
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="w-full py-4 mt-4 bg-white text-black font-bold uppercase tracking-widest rounded-xl hover:bg-[#d4a857] transition-all disabled:opacity-50"
-          >
-            {loading ? "Processing..." : (isSignUp ? "Register Account" : "Secure Login")}
-          </button>
-        </form>
-
-        <div className="mt-8 text-center login-anim relative z-10 border-t border-white/10 pt-6">
-          <p className="text-xs text-gray-500 uppercase tracking-widest">
-            {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
-            <button 
-              type="button"
-              onClick={() => { setIsSignUp(!isSignUp); setFeedback(null); }}
-              className="text-[#d4a857] font-bold cursor-pointer hover:text-white transition-colors ml-1"
-            >
-              {isSignUp ? "Log In" : "Sign Up"}
-            </button>
-          </p>
-        </div>
+        {!otpPurpose && <div className="login-anim relative z-10 mt-7 border-t border-white/10 pt-6 text-center text-xs uppercase tracking-widest text-gray-500">{mode === "forgot" ? <button type="button" onClick={() => changeMode("login")} className="font-bold text-[#d4a857] hover:text-white">Back to login</button> : <>{mode === "signup" ? "Already registered?" : "New here?"} <button type="button" onClick={() => changeMode(mode === "signup" ? "login" : "signup")} className="ml-1 font-bold text-[#d4a857] hover:text-white">{mode === "signup" ? "Log in" : "Create account"}</button></>}</div>}
       </div>
     </div>
   );
