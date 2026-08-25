@@ -1,93 +1,63 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import { initAudio, playSFX } from "@/lib/audio";
+import { useEffect, useState } from "react";
+
+const SEEN_KEY = "mcm-intro-seen";
 
 export default function Preloader() {
-  const [isEntering, setIsEntering] = useState(false);
-  const [isUnmounted, setIsUnmounted] = useState(false);
-  const container = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isLeaving, setIsLeaving] = useState(false);
 
-  // Automated Exit Trigger
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsEntering(true);
-    }, 3000); // Slightly extended to 3s to let the equalizer shine
-    return () => clearTimeout(timer);
+    if (window.sessionStorage.getItem(SEEN_KEY)) {
+      const skipTimer = window.setTimeout(() => setIsVisible(false), 0);
+      return () => window.clearTimeout(skipTimer);
+    }
+
+    window.sessionStorage.setItem(SEEN_KEY, "true");
+    const leaveTimer = window.setTimeout(() => setIsLeaving(true), 850);
+    const removeTimer = window.setTimeout(() => setIsVisible(false), 1250);
+
+    return () => {
+      window.clearTimeout(leaveTimer);
+      window.clearTimeout(removeTimer);
+    };
   }, []);
 
-  useGSAP(() => {
-    // 1. Organic, Recursive Equalizer Animation
-    gsap.utils.toArray(".eq-bar").forEach((bar: any) => {
-      const animateBar = () => {
-        if (!container.current) return; // Prevent memory leaks if unmounted
-        gsap.to(bar, {
-          scaleY: Math.random() * 0.8 + 0.2, // Random height between 20% and 100%
-          duration: Math.random() * 0.15 + 0.15, // Fast, snappy audio-like reaction time
-          ease: "sine.inOut",
-          onComplete: animateBar, // Recursive loop for continuous organic randomness
-        });
-      };
-      animateBar();
-    });
-
-    // 2. Cinematic Exit Transition
-    if (isEntering) {
-      const tl = gsap.timeline({
-        onComplete: () => setIsUnmounted(true)
-      });
-      
-      tl.to(".preloader-content", { y: -50, opacity: 0, duration: 0.6, ease: "power3.in" })
-        .to(container.current, { yPercent: -100, duration: 1.2, ease: "power4.inOut" });
-    }
-  }, { scope: container, dependencies: [isEntering] });
-
-  // Manual interaction to legally unlock browser AudioContext if tapped early
-  const handleManualUnlock = () => {
-    if (!isEntering) {
-      initAudio();
-      playSFX("riser");
-      setIsEntering(true);
-    }
+  const dismiss = () => {
+    setIsLeaving(true);
+    window.setTimeout(() => setIsVisible(false), 350);
   };
 
-  if (isUnmounted) return null;
+  if (!isVisible) return null;
 
   return (
-    <div 
-      ref={container} 
-      onClick={handleManualUnlock}
-      className="fixed inset-0 z-[9999] bg-[#07070a] flex flex-col items-center justify-center cursor-pointer overflow-hidden"
+    <button
+      type="button"
+      onClick={dismiss}
+      aria-label="Enter Middle Class Musicians website"
+      className={`fixed inset-0 z-[9999] flex cursor-pointer flex-col items-center justify-center overflow-hidden bg-[#07070a] px-6 transition duration-500 ${
+        isLeaving ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
+      }`}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,168,87,0.08),transparent_50%)] animate-pulse duration-[3000ms]" />
-      
-      <div className="preloader-content text-center relative z-10 flex flex-col items-center gap-6 w-full px-6">
-        
-        {/* Dynamic Simulated Equalizer */}
-        <div className="flex items-end justify-center gap-[4px] md:gap-1.5 h-12 md:h-16 w-full mb-2">
-          {[...Array(9)].map((_, i) => (
-            <div 
-              key={i} 
-              className="eq-bar w-1.5 md:w-2 bg-[#d4a857] rounded-t-sm origin-bottom" 
-              style={{ 
-                transform: "scaleY(0.2)", 
-                filter: "drop-shadow(0 0 10px rgba(212,168,87,0.6))" 
-              }}
+      <span className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,168,87,0.1),transparent_52%)]" />
+      <span className="relative z-10 flex w-full flex-col items-center gap-6 text-center">
+        <span className="flex h-12 items-end justify-center gap-1.5 md:h-14" aria-hidden="true">
+          {[0.72, 0.9, 0.62, 1.1, 0.78, 1, 0.66, 0.86, 0.74].map((duration, index) => (
+            <span
+              key={index}
+              className="eq-bar block h-full w-1.5 origin-bottom rounded-t-sm bg-[#d4a857] shadow-[0_0_12px_rgba(212,168,87,0.55)] md:w-2"
+              style={{ animationDuration: `${duration}s`, animationDelay: `${index * -0.07}s` }}
             />
           ))}
-        </div>
-
-        {/* Scaled Typography */}
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-head tracking-[0.15em] md:tracking-[0.25em] text-white text-glow uppercase leading-tight">
-          MIDDLE CLASS <span className="text-[#d4a857]">MUSICIANS</span>
-        </h1>
-        
-        <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-gray-500 animate-pulse mt-4">
-          Tap anywhere to enter
-        </p>
-      </div>
-    </div>
+        </span>
+        <span className="font-head text-3xl uppercase leading-tight tracking-[0.14em] text-white text-glow md:text-5xl md:tracking-[0.22em] lg:text-6xl">
+          Middle Class <span className="text-[#d4a857]">Musicians</span>
+        </span>
+        <span className="text-[9px] uppercase tracking-[0.35em] text-gray-500 md:text-[10px]">
+          Tap to enter
+        </span>
+      </span>
+    </button>
   );
 }

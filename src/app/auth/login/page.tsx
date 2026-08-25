@@ -15,6 +15,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [feedback, setFeedback] = useState<{ type: "error" | "success"; message: string } | null>(null);
 
   useGSAP(() => {
@@ -37,23 +38,25 @@ export default function LoginPage() {
 
     try {
       if (isSignUp) {
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { data, error } = await supabase.auth.signUp({ email, password });
         if (error) throw error;
-        
-        setFeedback({ type: "success", message: "Account created! Logging you in..." });
-        
-        // Auto-login after successful registration (requires Email Confirmation to be OFF in Supabase)
-        await supabase.auth.signInWithPassword({ email, password });
-        router.push("/blogs");
+
+        if (data.session) {
+          setFeedback({ type: "success", message: "Account created. Opening Studio Talk..." });
+          router.push("/blogs#studio-talk");
+        } else {
+          setFeedback({ type: "success", message: "Account created. Check your email to confirm it, then sign in." });
+          setIsSignUp(false);
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         
         setFeedback({ type: "success", message: "Access granted." });
-        router.push("/blogs");
+        router.push("/blogs#studio-talk");
       }
-    } catch (error: any) {
-      setFeedback({ type: "error", message: error.message || "Authentication failed. Check your credentials." });
+    } catch (error: unknown) {
+      setFeedback({ type: "error", message: error instanceof Error ? error.message : "Authentication failed. Check your credentials." });
     } finally {
       setLoading(false);
     }
@@ -83,10 +86,12 @@ export default function LoginPage() {
 
         <form onSubmit={handleAuth} className="relative z-10 flex flex-col gap-5 login-anim">
           <div>
-            <label className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Email</label>
+            <label htmlFor="login-email" className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Email</label>
             <input 
+              id="login-email"
               type="email" 
               required
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="artist@domain.com" 
@@ -94,16 +99,23 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Password</label>
-            <input 
-              type="password" 
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••" 
-              minLength={6}
-              className="w-full bg-[#07070a] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#d4a857] transition-colors" 
-            />
+            <label htmlFor="login-password" className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Password</label>
+            <div className="relative">
+              <input
+                id="login-password"
+                type={showPassword ? "text" : "password"}
+                required
+                autoComplete={isSignUp ? "new-password" : "current-password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                minLength={6}
+                className="w-full bg-[#07070a] border border-white/10 rounded-xl p-4 pr-20 text-white focus:outline-none focus:border-[#d4a857] transition-colors"
+              />
+              <button type="button" onClick={() => setShowPassword((show) => !show)} className="absolute inset-y-0 right-0 px-4 text-[9px] font-bold uppercase tracking-widest text-gray-500 hover:text-white" aria-label={`${showPassword ? "Hide" : "Show"} password`}>
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
           </div>
           
           <button 
