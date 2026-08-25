@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SoundToggle from "./SoundToggle";
+import AuthNav from "./AuthNav";
 import { siteConfig } from "@/lib/site";
 
 const navLinks = [
@@ -74,14 +75,7 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <Link
-              href="/auth/login"
-              data-sound="hover"
-              aria-current={isActive("/auth/login") ? "page" : undefined}
-              className="flex min-h-11 items-center text-[11px] font-bold uppercase tracking-[0.16em] text-[#d4a857] transition hover:text-white"
-            >
-              Client Portal
-            </Link>
+            <AuthNav />
           </nav>
 
           <div className="relative z-50 flex items-center gap-2">
@@ -136,9 +130,7 @@ export default function Navbar() {
               <span className="font-body text-[10px] tracking-widest text-gray-600">0{index + 1}</span>
             </Link>
           ))}
-          <Link href="/auth/login" onClick={() => setIsOpen(false)} className="mt-4 py-3 font-head text-3xl uppercase tracking-widest text-[#d4a857]">
-            Client Portal
-          </Link>
+          <AuthNav mobile onNavigate={() => setIsOpen(false)} />
           <a
             href={`${siteConfig.whatsapp}?text=Hi%20MCM%2C%20I%20want%20to%20book%20a%20studio%20session.`}
             target="_blank"

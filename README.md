@@ -31,9 +31,18 @@ The Raw/Final player expects matched files under `public/audio/`:
 
 Both versions of each song should start at the same timestamp and use the same duration so switching preserves the listener's position accurately. Update the titles and paths in `src/app/portfolio/page.tsx` when final assets are ready.
 
-## Community setup
+## Supabase setup
 
-Apply `supabase/migrations/20260825_blog_discussions.sql` to the connected Supabase project. The migration creates comments, nested replies, votes, indexes, and row-level security policies.
+Apply the migrations in `supabase/migrations/` to the connected Supabase project. They create Studio Talk, user profiles, bookings, purchases, realtime subscriptions, indexes, triggers, and row-level security policies.
+
+In Supabase Authentication:
+
+- Enable email confirmations.
+- Set the confirmation email template to include the six-digit token with `{{ .Token }}`. The login screen verifies this as a `signup` OTP.
+- Set the magic-link email template to include `{{ .Token }}`. Returning users receive this OTP only after their password succeeds.
+- Add `/auth/update-password` to the allowed redirect URLs for password recovery.
+
+Bookings and purchases are deliberately read-only for clients. Insert or synchronize those records from a trusted admin/backend process using the authenticated user ID; never expose a service-role key in the browser.
 
 ## Search and answer-engine files
 
