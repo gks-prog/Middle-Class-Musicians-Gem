@@ -1,10 +1,21 @@
 import type { MetadataRoute } from "next";
-import { getSiteUrl } from "@/lib/site";
+import { siteConfig } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = getSiteUrl();
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/dashboard", "/auth/"] },
-    sitemap: `${base}/sitemap.xml`,
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/auth/"],
+      },
+      {
+        userAgent: ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "PerplexityBot"],
+        allow: "/",
+        disallow: ["/auth/"],
+      },
+    ],
+    sitemap: `${siteConfig.url}/sitemap.xml`,
+    host: siteConfig.url,
   };
 }
