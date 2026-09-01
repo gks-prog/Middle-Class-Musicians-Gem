@@ -1,8 +1,8 @@
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
-  title: "Client & Community Login",
-  description: "Sign in to the Middle Class Musicians client and community portal.",
+  title: "Phone Login | Client & Community Portal",
+  description: "Access the Middle Class Musicians client portal with a secure WhatsApp or SMS verification code.",
   path: "/auth/login",
   noIndex: true,
 });

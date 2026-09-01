@@ -37,13 +37,14 @@ Apply the migrations in `supabase/migrations/` to the connected Supabase project
 
 In Supabase Authentication:
 
-- Enable email confirmations.
-- Set the confirmation email template to include the six-digit token with `{{ .Token }}`. The login screen verifies this as a `signup` OTP.
-- Set the magic-link email template to include `{{ .Token }}`. Returning users receive this OTP only after their password succeeds.
-- Add `/auth/update-password` to the allowed redirect URLs for password recovery.
-- Set **Site URL** to the public production domain, not a Vercel preview URL.
-- Add `https://your-production-domain/auth/callback` and `https://your-production-domain/auth/update-password` to **Redirect URLs**. Keep the Vercel production URL there too while it remains publicly used.
-- The login also supports Supabase's default secure email links. They pass through `/auth/callback` and return the user to the intended protected page.
+- Enable the **Phone** provider and allow phone signups.
+- Configure **Twilio** or **Twilio Verify** as the messaging provider. WhatsApp delivery is only supported through these providers; the same login also offers SMS.
+- Configure an approved WhatsApp authentication sender/template in Twilio before enabling the WhatsApp option publicly.
+- Keep Supabase's default OTP request limit (at least 60 seconds), set a short OTP expiry, and enable CAPTCHA before a public launch to control abuse and messaging costs.
+- Indian production messaging may require the provider's TRAI/DLT registration and approved templates.
+- Set **Site URL** to the public production domain rather than a Vercel preview URL.
+
+Phone OTP automatically creates a Supabase user for a new verified number. Existing email-only users are not automatically linked to a new phone identity; migrate or link any real legacy accounts before removing their email access permanently.
 
 Clients can request an available studio slot and cancel their own pending request. Confirmations, prices, purchases, and fulfilment remain studio-controlled; handle those from a trusted admin/backend process using the authenticated user ID, and never expose a service-role key in the browser.
 
