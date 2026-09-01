@@ -55,7 +55,7 @@ export default function LoginPage() {
         if (error) throw error;
         if (data.session) {
           setFeedback({ type: "success", message: "Account created. Redirecting…" });
-          router.push("/blogs");
+          router.push("/dashboard");
         } else {
           setFeedback({ type: "success", message: "Account created. Confirm your email before signing in." });
         }
@@ -64,7 +64,7 @@ export default function LoginPage() {
         if (error) throw error;
         
         setFeedback({ type: "success", message: "Access granted." });
-        router.push("/blogs");
+        router.push("/dashboard");
       }
     } catch (error: any) {
       setFeedback({ type: "error", message: error.message || "Authentication failed. Check your credentials." });

@@ -90,6 +90,7 @@ export default function Navbar() {
                 {accountOpen && (
                   <div className="absolute right-0 mt-3 w-56 rounded-2xl border border-white/10 bg-[#0c0c10] p-2 shadow-2xl">
                     <p className="truncate px-3 py-2 text-xs text-gray-500">{user.email}</p>
+                    <Link href="/dashboard" className="block rounded-xl px-3 py-3 text-sm text-white hover:bg-white/5">Dashboard</Link>
                     <Link href="/blogs" className="block rounded-xl px-3 py-3 text-sm text-white hover:bg-white/5">Community</Link>
                     <button onClick={signOut} className="w-full rounded-xl px-3 py-3 text-left text-sm text-red-400 hover:bg-white/5">Sign out</button>
                   </div>
@@ -148,7 +149,7 @@ export default function Navbar() {
             </Link>
           ))}
           {user ? (
-            <button onClick={signOut} tabIndex={isOpen ? 0 : -1} className="text-3xl font-head tracking-widest uppercase text-[#d4a857] mt-4">Sign Out</button>
+            <div className="flex flex-col items-center gap-5 mt-4"><Link href="/dashboard" tabIndex={isOpen ? 0 : -1} className="text-3xl font-head tracking-widest uppercase text-[#d4a857]">Dashboard</Link><button onClick={signOut} tabIndex={isOpen ? 0 : -1} className="text-xl font-head tracking-widest uppercase text-gray-500">Sign Out</button></div>
           ) : (
             <Link href="/auth/login" data-sound="hover" tabIndex={isOpen ? 0 : -1} className="text-4xl font-head tracking-widest uppercase text-[#d4a857] mt-4 hover:text-glow hover:scale-110 transition-all duration-300">Login</Link>
           )}

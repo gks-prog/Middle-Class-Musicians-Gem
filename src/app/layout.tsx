@@ -6,8 +6,10 @@ import AudioEngine from "@/components/global/AudioEngine";
 import FloatingCTA from "@/components/global/FloatingCTA";
 import Preloader from "@/components/global/Preloader";
 import FloatingNotes from "@/components/global/FloatingNotes";
+import SoundControl from "@/components/global/SoundControl";
 
 import "./globals.css";
+import { getSiteUrl } from "@/lib/site";
 
 const bebasNeue = Bebas_Neue({ 
   weight: "400", 
@@ -21,6 +23,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
   title: {
     default: "Middle Class Musicians — Recording Studio in Delhi",
     template: "%s | Middle Class Musicians",
@@ -51,7 +54,8 @@ export default function RootLayout({
           name: "Middle Class Musicians",
           description: "Recording, mixing, mastering, beat production, and music courses in Delhi.",
           telephone: "+91 93157 78147",
-          areaServed: "Delhi",
+          address: { "@type": "PostalAddress", addressLocality: "Nawada", addressRegion: "Delhi", addressCountry: "IN" },
+          areaServed: ["Nawada", "Delhi"],
           sameAs: ["https://instagram.com/middleclassmusicians"],
           makesOffer: ["Recording", "Mixing", "Mastering", "Beat Production", "Music Courses"].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name } })),
         }) }} />
@@ -75,6 +79,7 @@ export default function RootLayout({
         </main>
         
         <FloatingCTA />
+        <SoundControl />
         <Footer />
       </body>
     </html>

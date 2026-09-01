@@ -82,6 +82,7 @@ export default function Footer() {
             {["Studio", "Services", "Portfolio", "Blogs", "Courses"].map((link) => (
               <Link key={link} href={`/${link.toLowerCase()}`} data-sound="hover" className="hover:text-white hover:translate-x-2 transition-all w-fit">{link}</Link>
             ))}
+            <Link href="/recording-studio-delhi" data-sound="hover" className="hover:text-white hover:translate-x-2 transition-all w-fit">Nawada Studio</Link>
           </div>
 
           <div className="flex justify-start md:justify-end lg:col-span-1">

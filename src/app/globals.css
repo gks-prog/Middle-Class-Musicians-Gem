@@ -27,6 +27,12 @@
   outline-offset: 4px;
 }
 
+@layer components {
+  .form-control {
+    @apply w-full rounded-xl border border-white/10 bg-[#07070a] p-4 text-white outline-none transition-colors focus:border-[#d4a857] disabled:cursor-not-allowed;
+  }
+}
+
 @layer utilities {
   /* Premium Glowing Effects */
   .text-glow {
