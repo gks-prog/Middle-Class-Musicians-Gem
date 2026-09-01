@@ -1,47 +1,31 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { playSFX } from "@/lib/audio";
-
-const SYMBOLS = ["♪", "♫", "♩", "♬"];
-const FREQUENCIES = [329.63, 392.00, 440.00, 523.25, 659.25]; // Pentatonic Scale
+const notes = [
+  { symbol: "♪", left: "7%", duration: "24s", delay: "-8s", size: "1.1rem" },
+  { symbol: "♫", left: "18%", duration: "31s", delay: "-17s", size: "1.4rem" },
+  { symbol: "♩", left: "31%", duration: "28s", delay: "-4s", size: "1rem" },
+  { symbol: "♬", left: "44%", duration: "35s", delay: "-22s", size: "1.3rem" },
+  { symbol: "♪", left: "58%", duration: "26s", delay: "-12s", size: "1.05rem" },
+  { symbol: "♫", left: "70%", duration: "33s", delay: "-20s", size: "1.5rem" },
+  { symbol: "♩", left: "81%", duration: "29s", delay: "-6s", size: "1.2rem" },
+  { symbol: "♬", left: "91%", duration: "37s", delay: "-25s", size: "1rem" },
+];
 
 export default function FloatingNotes() {
-  const [notes, setNotes] = useState<any[]>([]);
-
-  useEffect(() => {
-    if (window.matchMedia("(max-width: 767px), (prefers-reduced-motion: reduce)").matches) return;
-    const generatedNotes = Array.from({ length: 10 }).map((_, i) => ({
-      id: i,
-      symbol: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
-      left: `${Math.random() * 95}vw`, // Keep within screen bounds
-      duration: `${Math.random() * 20 + 15}s`, // Slower, more elegant 15-35s duration
-      delay: `${Math.random() * 10}s`, // Staggered entrances
-      size: `${Math.random() * 1.5 + 1}rem`,
-      freq: FREQUENCIES[Math.floor(Math.random() * FREQUENCIES.length)]
-    }));
-    setNotes(generatedNotes);
-  }, []);
-
-  if (notes.length === 0) return null;
-
   return (
-    <div className="fixed inset-0 z-30 pointer-events-none overflow-hidden mix-blend-screen">
-      {notes.map((note) => (
-        <div
-          key={note.id}
-          className="absolute bottom-[-100px] floating-note pointer-events-auto cursor-crosshair text-glow"
+    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden mix-blend-screen" aria-hidden="true">
+      {notes.map((note, index) => (
+        <span
+          key={`${note.symbol}-${index}`}
+          className="floating-note absolute bottom-[-100px] text-glow"
           style={{
             left: note.left,
             fontSize: note.size,
             animationDuration: note.duration,
             animationDelay: note.delay,
-            color: "rgba(212, 168, 87, 0.4)",
+            color: "rgba(212, 168, 87, 0.26)",
           }}
-          onMouseEnter={() => playSFX("note", note.freq)}
         >
           {note.symbol}
-        </div>
+        </span>
       ))}
     </div>
   );

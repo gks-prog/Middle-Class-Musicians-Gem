@@ -1,12 +1,22 @@
 import type { MetadataRoute } from "next";
-import { getSiteUrl } from "@/lib/site";
+import { absoluteUrl } from "@/lib/site";
+
+const routes = [
+  "",
+  "/studio",
+  "/services",
+  "/portfolio",
+  "/blogs",
+  "/blogs/rappers",
+  "/blogs/producers",
+  "/courses",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = getSiteUrl();
-  return ["", "/studio", "/services", "/portfolio", "/courses", "/blogs", "/blogs/rappers", "/blogs/producers", "/recording-studio-delhi"].map((path, index) => ({
-    url: `${base}${path}`,
+  return routes.map((route, index) => ({
+    url: absoluteUrl(route || "/"),
     lastModified: new Date(),
-    changeFrequency: index === 0 ? "weekly" : "monthly",
-    priority: index === 0 ? 1 : path === "/recording-studio-delhi" ? 0.9 : 0.7,
+    changeFrequency: route.startsWith("/blogs") ? "monthly" : "weekly",
+    priority: index === 0 ? 1 : route === "/services" || route === "/portfolio" ? 0.9 : 0.7,
   }));
 }

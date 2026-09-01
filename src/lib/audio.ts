@@ -1,20 +1,21 @@
 let audioCtx: AudioContext | null = null;
-let soundEnabled = true;
 
-export const setSoundEnabled = (enabled: boolean) => { soundEnabled = enabled; };
-export const getSoundEnabled = () => soundEnabled;
+type WindowWithWebkitAudio = Window & typeof globalThis & {
+  webkitAudioContext?: typeof AudioContext;
+};
 
 export const initAudio = () => {
   if (typeof window === "undefined") return;
   if (!audioCtx) {
-    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    const AudioContextClass = window.AudioContext || (window as WindowWithWebkitAudio).webkitAudioContext;
+    if (!AudioContextClass) return;
     audioCtx = new AudioContextClass();
   }
   if (audioCtx.state === "suspended") audioCtx.resume();
 };
 
 export const playSFX = (type: "hover" | "click" | "note" | "riser", freqBase = 440) => {
-  if (!soundEnabled || !audioCtx || audioCtx.state === "suspended") return;
+  if (!audioCtx || audioCtx.state === "suspended") return;
   
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
