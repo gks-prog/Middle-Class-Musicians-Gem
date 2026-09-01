@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
@@ -14,6 +14,12 @@ type Feedback = { type: "error" | "success"; message: string } | null;
 function safeDestination() {
   const next = new URLSearchParams(window.location.search).get("next");
   return next?.startsWith("/") && !next.startsWith("//") ? next : "/dashboard";
+}
+
+function authCallback(destination = safeDestination()) {
+  const callback = new URL("/auth/callback", window.location.origin);
+  callback.searchParams.set("next", destination);
+  return callback.toString();
 }
 
 export default function LoginPage() {
@@ -33,6 +39,14 @@ export default function LoginPage() {
     gsap.from(".login-anim", { y: 24, opacity: 0, duration: 0.75, stagger: 0.08, ease: "power3.out", clearProps: "all" });
   }, { scope: container });
 
+  useEffect(() => {
+    const error = new URLSearchParams(window.location.search).get("error");
+    if (error) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFeedback({ type: "error", message: error });
+    }
+  }, []);
+
   const beginAuthentication = async (event: React.FormEvent) => {
     event.preventDefault();
     setLoading(true);
@@ -41,34 +55,41 @@ export default function LoginPage() {
 
     try {
       if (mode === "forgot") {
-        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/auth/update-password` });
+        const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: authCallback("/auth/update-password") });
         if (error) throw error;
         setFeedback({ type: "success", message: "Password reset link sent. Check your inbox and spam folder." });
         return;
       }
 
       if (mode === "signup") {
-        const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { display_name: displayName.trim() } } });
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: { display_name: displayName.trim() },
+            emailRedirectTo: authCallback(),
+          },
+        });
         if (error) throw error;
         if (data.session) {
           await supabase.auth.signOut({ scope: "local" });
-          const { error: otpError } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+          const { error: otpError } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: authCallback() } });
           if (otpError) throw otpError;
           setOtpPurpose("login");
         } else {
           setOtpPurpose("signup");
         }
-        setFeedback({ type: "success", message: "We sent a six-digit confirmation code to your email." });
+        setFeedback({ type: "success", message: "Verification email sent. Enter its six-digit code, or use the secure link in the email." });
         return;
       }
 
       const { error: passwordError } = await supabase.auth.signInWithPassword({ email, password });
       if (passwordError) throw passwordError;
       await supabase.auth.signOut({ scope: "local" });
-      const { error: otpError } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+      const { error: otpError } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: authCallback() } });
       if (otpError) throw otpError;
       setOtpPurpose("login");
-      setFeedback({ type: "success", message: "Password accepted. Enter the code sent to your email." });
+      setFeedback({ type: "success", message: "Password accepted. Enter the email code, or use the secure sign-in link in that email." });
     } catch (error: unknown) {
       setFeedback({ type: "error", message: error instanceof Error ? error.message : "Authentication failed. Please try again." });
     } finally {
@@ -102,8 +123,8 @@ export default function LoginPage() {
     try {
       const supabase = createClient();
       const result = otpPurpose === "signup"
-        ? await supabase.auth.resend({ type: "signup", email })
-        : await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+        ? await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: authCallback() } })
+        : await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: authCallback() } });
       if (result.error) throw result.error;
       setFeedback({ type: "success", message: "A fresh code has been sent." });
     } catch (error: unknown) {
@@ -135,7 +156,7 @@ export default function LoginPage() {
             <div>
               <label htmlFor="login-otp" className="mb-2 block font-head text-xs uppercase tracking-widest text-gray-400">Email code</label>
               <input id="login-otp" inputMode="numeric" autoComplete="one-time-code" pattern="[0-9]{6}" maxLength={6} required value={otp} onChange={(event) => setOtp(event.target.value.replace(/\D/g, ""))} placeholder="000000" className="w-full rounded-xl border border-white/10 bg-[#07070a] p-4 text-center font-head text-3xl tracking-[0.35em] text-white outline-none transition focus:border-[#d4a857]" />
-              <p className="mt-2 text-xs text-gray-500">Sent to {email}. Codes expire for your security.</p>
+              <p className="mt-2 text-xs leading-relaxed text-gray-500">Sent to {email}. If the email shows a secure sign-in button instead of a code, use that button—the callback will return you here safely.</p>
             </div>
             <button type="submit" disabled={loading || otp.length !== 6} className="w-full rounded-xl bg-white py-4 text-xs font-bold uppercase tracking-widest text-black transition hover:bg-[#d4a857] disabled:opacity-40">{loading ? "Verifying…" : "Verify & continue"}</button>
             <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest"><button type="button" onClick={() => changeMode(otpPurpose === "signup" ? "signup" : "login")} className="text-gray-500 hover:text-white">Back</button><button type="button" onClick={resendOtp} disabled={loading} className="text-[#d4a857] hover:text-white disabled:opacity-40">Resend code</button></div>
