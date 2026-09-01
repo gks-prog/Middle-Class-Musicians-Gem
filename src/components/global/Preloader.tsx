@@ -10,11 +10,15 @@ export default function Preloader() {
   const [isUnmounted, setIsUnmounted] = useState(false);
   const container = useRef<HTMLDivElement>(null);
 
-  // Automated Exit Trigger
   useEffect(() => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (sessionStorage.getItem("mcm-intro-seen") || reduceMotion) {
+      setIsUnmounted(true);
+      return;
+    }
     const timer = setTimeout(() => {
       setIsEntering(true);
-    }, 3000); // Slightly extended to 3s to let the equalizer shine
+    }, 1100);
     return () => clearTimeout(timer);
   }, []);
 
@@ -36,7 +40,10 @@ export default function Preloader() {
     // 2. Cinematic Exit Transition
     if (isEntering) {
       const tl = gsap.timeline({
-        onComplete: () => setIsUnmounted(true)
+        onComplete: () => {
+          sessionStorage.setItem("mcm-intro-seen", "true");
+          setIsUnmounted(true);
+        }
       });
       
       tl.to(".preloader-content", { y: -50, opacity: 0, duration: 0.6, ease: "power3.in" })
@@ -59,6 +66,12 @@ export default function Preloader() {
     <div 
       ref={container} 
       onClick={handleManualUnlock}
+      role="button"
+      tabIndex={0}
+      aria-label="Enter Middle Class Musicians website"
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") handleManualUnlock();
+      }}
       className="fixed inset-0 z-[9999] bg-[#07070a] flex flex-col items-center justify-center cursor-pointer overflow-hidden"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(212,168,87,0.08),transparent_50%)] animate-pulse duration-[3000ms]" />
@@ -85,7 +98,7 @@ export default function Preloader() {
         </h1>
         
         <p className="text-[10px] md:text-xs uppercase tracking-[0.4em] text-gray-500 animate-pulse mt-4">
-          Tap anywhere to enter
+          Tap to enter · intro plays once
         </p>
       </div>
     </div>

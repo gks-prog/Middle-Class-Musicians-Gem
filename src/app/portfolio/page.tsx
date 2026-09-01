@@ -19,6 +19,7 @@ export default function PortfolioPage() {
   const [mix, setMix] = useState<"raw" | "final">("final");
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [audioError, setAudioError] = useState(false);
 
   useGSAP(() => {
     gsap.fromTo(".anim-text", { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power4.out" });
@@ -43,6 +44,7 @@ export default function PortfolioPage() {
   const openPlayer = (song: Song) => {
     setActiveSong(song);
     setMix("final");
+    setAudioError(false);
     setIsPlaying(true);
     requestAnimationFrame(() => requestAnimationFrame(() => void audioRef.current?.play().catch(() => setIsPlaying(false))));
   };
@@ -51,6 +53,7 @@ export default function PortfolioPage() {
     if (!activeSong) return;
     const wasPlaying = !audioRef.current?.paused;
     setMix(nextMix);
+    setAudioError(false);
     requestAnimationFrame(() => {
       if (wasPlaying) void audioRef.current?.play().catch(() => undefined);
     });
@@ -128,6 +131,7 @@ export default function PortfolioPage() {
                 <p className="text-[9px] uppercase tracking-[0.25em] text-gray-600 mb-1">Now Playing</p>
                 <h3 className="text-sm md:text-base font-bold text-white truncate">{activeSong.title}</h3>
                 <p className="text-[9px] uppercase tracking-widest text-gray-500 mt-1">{mix === "raw" ? "Raw • No FX" : "Final • Mixed + Mastered"}</p>
+                {audioError && <p role="status" className="text-[10px] text-red-400 mt-1">Audio file unavailable. Add the matching file in public/audio.</p>}
               </div>
 
               {/* Floating Raw / Final controls */}
@@ -142,7 +146,7 @@ export default function PortfolioPage() {
 
               <button onClick={closePlayer} aria-label="Close player" className="w-8 h-8 shrink-0 text-gray-600 hover:text-white text-xl transition-colors">×</button>
             </div>
-            <audio ref={audioRef} key={`${activeSong.title}-${mix}`} src={currentAudio} onPlay={() => setIsPlaying(true)} onPause={() => setIsPlaying(false)} preload="metadata" />
+            <audio ref={audioRef} key={`${activeSong.title}-${mix}`} src={currentAudio} onPlay={() => { setIsPlaying(true); setAudioError(false); }} onPause={() => setIsPlaying(false)} onError={() => { setIsPlaying(false); setAudioError(true); }} preload="metadata" />
           </div>
         </div>
       )}

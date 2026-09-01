@@ -12,6 +12,8 @@ export default function LoginPage() {
   const router = useRouter();
 
   const [isSignUp, setIsSignUp] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
+  const [artistName, setArtistName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,21 +38,33 @@ export default function LoginPage() {
     const supabase = createClient();
 
     try {
-      if (isSignUp) {
-        const { error } = await supabase.auth.signUp({ email, password });
+      if (isResetting) {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/auth/login`,
+        });
         if (error) throw error;
-        
-        setFeedback({ type: "success", message: "Account created! Logging you in..." });
-        
-        // Auto-login after successful registration (requires Email Confirmation to be OFF in Supabase)
-        await supabase.auth.signInWithPassword({ email, password });
-        router.push("/blogs");
+        setFeedback({ type: "success", message: "Password-reset link sent. Check your inbox and spam folder." });
+        return;
+      }
+      if (isSignUp) {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { user_name: artistName.trim() } },
+        });
+        if (error) throw error;
+        if (data.session) {
+          setFeedback({ type: "success", message: "Account created. Redirecting…" });
+          router.push("/dashboard");
+        } else {
+          setFeedback({ type: "success", message: "Account created. Confirm your email before signing in." });
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         
         setFeedback({ type: "success", message: "Access granted." });
-        router.push("/blogs");
+        router.push("/dashboard");
       }
     } catch (error: any) {
       setFeedback({ type: "error", message: error.message || "Authentication failed. Check your credentials." });
@@ -69,7 +83,7 @@ export default function LoginPage() {
             <span className="text-[#d4a857]">MCM</span> PORTAL
           </Link>
           <p className="text-gray-400 text-sm">
-            {isSignUp ? "Create an account to join the community." : "Sign in to access the studio community."}
+            {isResetting ? "Request a secure password-reset link." : isSignUp ? "Create an account to join the community." : "Sign in to access the studio community."}
           </p>
         </div>
 
@@ -82,45 +96,61 @@ export default function LoginPage() {
         )}
 
         <form onSubmit={handleAuth} className="relative z-10 flex flex-col gap-5 login-anim">
+          {isSignUp && !isResetting && (
+            <div>
+              <label htmlFor="artist-name" className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Artist Name</label>
+              <input id="artist-name" type="text" required value={artistName} onChange={(e) => setArtistName(e.target.value)} maxLength={50} autoComplete="nickname" placeholder="Your display name" className="w-full bg-[#07070a] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#d4a857] transition-colors" />
+            </div>
+          )}
           <div>
-            <label className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Email</label>
+            <label htmlFor="email" className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Email</label>
             <input 
+              id="email"
               type="email" 
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="artist@domain.com" 
+              autoComplete="email"
               className="w-full bg-[#07070a] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#d4a857] transition-colors" 
             />
           </div>
-          <div>
-            <label className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Password</label>
+          {!isResetting && <div>
+            <label htmlFor="password" className="block font-head text-xs tracking-widest text-gray-400 mb-2 uppercase">Password</label>
             <input 
+              id="password"
               type="password" 
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••" 
               minLength={6}
+              autoComplete={isSignUp ? "new-password" : "current-password"}
               className="w-full bg-[#07070a] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#d4a857] transition-colors" 
             />
-          </div>
+          </div>}
           
           <button 
             type="submit" 
             disabled={loading}
             className="w-full py-4 mt-4 bg-white text-black font-bold uppercase tracking-widest rounded-xl hover:bg-[#d4a857] transition-all disabled:opacity-50"
           >
-            {loading ? "Processing..." : (isSignUp ? "Register Account" : "Secure Login")}
+            {loading ? "Processing..." : isResetting ? "Send Reset Link" : (isSignUp ? "Register Account" : "Secure Login")}
           </button>
         </form>
+
+        {!isSignUp && (
+          <button type="button" onClick={() => { setIsResetting(!isResetting); setFeedback(null); }} className="relative z-10 mt-5 w-full text-center text-xs text-gray-500 hover:text-[#d4a857] transition-colors">
+            {isResetting ? "Back to login" : "Forgot password?"}
+          </button>
+        )}
 
         <div className="mt-8 text-center login-anim relative z-10 border-t border-white/10 pt-6">
           <p className="text-xs text-gray-500 uppercase tracking-widest">
             {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
             <button 
               type="button"
-              onClick={() => { setIsSignUp(!isSignUp); setFeedback(null); }}
+              onClick={() => { setIsSignUp(!isSignUp); setIsResetting(false); setFeedback(null); }}
               className="text-[#d4a857] font-bold cursor-pointer hover:text-white transition-colors ml-1"
             >
               {isSignUp ? "Log In" : "Sign Up"}

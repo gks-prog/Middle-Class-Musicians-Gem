@@ -1,4 +1,8 @@
 let audioCtx: AudioContext | null = null;
+let soundEnabled = true;
+
+export const setSoundEnabled = (enabled: boolean) => { soundEnabled = enabled; };
+export const getSoundEnabled = () => soundEnabled;
 
 export const initAudio = () => {
   if (typeof window === "undefined") return;
@@ -10,7 +14,7 @@ export const initAudio = () => {
 };
 
 export const playSFX = (type: "hover" | "click" | "note" | "riser", freqBase = 440) => {
-  if (!audioCtx || audioCtx.state === "suspended") return;
+  if (!soundEnabled || !audioCtx || audioCtx.state === "suspended") return;
   
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();

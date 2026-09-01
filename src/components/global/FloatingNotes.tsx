@@ -10,7 +10,8 @@ export default function FloatingNotes() {
   const [notes, setNotes] = useState<any[]>([]);
 
   useEffect(() => {
-    const generatedNotes = Array.from({ length: 25 }).map((_, i) => ({
+    if (window.matchMedia("(max-width: 767px), (prefers-reduced-motion: reduce)").matches) return;
+    const generatedNotes = Array.from({ length: 10 }).map((_, i) => ({
       id: i,
       symbol: SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)],
       left: `${Math.random() * 95}vw`, // Keep within screen bounds
