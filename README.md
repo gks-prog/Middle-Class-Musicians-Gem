@@ -42,7 +42,7 @@ In Supabase Authentication:
 - Set the magic-link email template to include `{{ .Token }}`. Returning users receive this OTP only after their password succeeds.
 - Add `/auth/update-password` to the allowed redirect URLs for password recovery.
 
-Bookings and purchases are deliberately read-only for clients. Insert or synchronize those records from a trusted admin/backend process using the authenticated user ID; never expose a service-role key in the browser.
+Clients can request an available studio slot and cancel their own pending request. Confirmations, prices, purchases, and fulfilment remain studio-controlled; handle those from a trusted admin/backend process using the authenticated user ID, and never expose a service-role key in the browser.
 
 ## Search and answer-engine files
 
