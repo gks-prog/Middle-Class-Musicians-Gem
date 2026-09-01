@@ -8,6 +8,25 @@
   }
 }
 
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 10000;
+  transform: translateY(-200%);
+  border-radius: 999px;
+  background: #d4a857;
+  color: #07070a;
+  padding: .75rem 1rem;
+  font-weight: 700;
+}
+.skip-link:focus { transform: translateY(0); }
+
+:focus-visible {
+  outline: 2px solid #d4a857;
+  outline-offset: 4px;
+}
+
 @layer utilities {
   /* Premium Glowing Effects */
   .text-glow {
@@ -69,4 +88,16 @@
     transform: translateY(-120vh) rotate(360deg);
     opacity: 0;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+  .gsap-reveal { opacity: 1; visibility: visible; }
+  .floating-note { display: none; }
 }

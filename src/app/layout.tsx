@@ -21,8 +21,20 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Middle Class Musicians — Premium Recording Studio",
+  title: {
+    default: "Middle Class Musicians — Recording Studio in Delhi",
+    template: "%s | Middle Class Musicians",
+  },
   description: "Delhi's premier studio for Recording, Mixing, Mastering, and Beat Production.",
+  keywords: ["recording studio Delhi", "mixing and mastering Delhi", "music production", "beat production", "Middle Class Musicians"],
+  openGraph: {
+    title: "Middle Class Musicians — Recording Studio in Delhi",
+    description: "Recording, mixing, mastering, beat production, and music courses in Delhi.",
+    type: "website",
+    locale: "en_IN",
+    siteName: "Middle Class Musicians",
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -32,7 +44,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth bg-[#07070a]">
+      <head>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "MusicRecordingStudio",
+          name: "Middle Class Musicians",
+          description: "Recording, mixing, mastering, beat production, and music courses in Delhi.",
+          telephone: "+91 93157 78147",
+          areaServed: "Delhi",
+          sameAs: ["https://instagram.com/middleclassmusicians"],
+          makesOffer: ["Recording", "Mixing", "Mastering", "Beat Production", "Music Courses"].map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name } })),
+        }) }} />
+      </head>
       <body className={`${bebasNeue.variable} ${montserrat.variable} font-body bg-bgPrimary text-textPrimary antialiased selection:bg-[#d4a857] selection:text-black min-h-screen flex flex-col`}>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         
         {/* The Cinematic Gatekeeper */}
         <Preloader />
@@ -45,7 +70,7 @@ export default function RootLayout({
         <Navbar />
         
         {/* Main Content Area (Expands to push footer down, z-10 keeps it above notes) */}
-        <main className="flex-grow relative z-10">
+        <main id="main-content" tabIndex={-1} className="flex-grow relative z-10 outline-none">
           {children}
         </main>
         

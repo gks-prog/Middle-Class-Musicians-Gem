@@ -14,7 +14,7 @@ export default function Footer() {
     setBtnText("Opening WhatsApp...");
 
     const formData = new FormData(e.currentTarget);
-    const waText = `*New Studio Enquiry*%0A%0A*Name:* ${formData.get("name")}%0A*Service Required:* ${formData.get("service")}%0A*Message:* ${formData.get("message")}`;
+    const waText = encodeURIComponent(`*New Studio Enquiry*\n\n*Name:* ${formData.get("name")}\n*Service Required:* ${formData.get("service")}\n*Message:* ${formData.get("message")}`);
     
     setTimeout(() => {
       window.open(`https://wa.me/919315778147?text=${waText}`, "_blank");
@@ -48,7 +48,7 @@ export default function Footer() {
           <form onSubmit={handleWhatsAppSubmit} className="relative z-10 flex flex-col gap-6">
             <input type="text" name="name" required placeholder="Your Name / Artist Name" data-sound="hover" className="w-full bg-[#07070a] border border-white/10 rounded-2xl p-5 text-white focus:outline-none focus:border-[#d4a857] focus:shadow-[0_0_20px_rgba(212,168,87,0.2)] transition-all duration-300" />
             <select name="service" required data-sound="click" className="w-full bg-[#07070a] border border-white/10 rounded-2xl p-5 text-gray-400 focus:outline-none focus:border-[#d4a857] focus:shadow-[0_0_20px_rgba(212,168,87,0.2)] transition-all duration-300 appearance-none cursor-pointer">
-              <option value="" disabled selected>Select a Service</option>
+              <option value="" disabled>Select a Service</option>
               <option value="Recording & Mixing">Recording & Mixing</option>
               <option value="Beat Production">Beat Production</option>
               <option value="Video Production">Video Production</option>

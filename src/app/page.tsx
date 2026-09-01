@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -142,7 +143,7 @@ export default function Home() {
             {portfolioVideos.map((video, idx) => (
               <a key={idx} href={`https://youtu.be/${video.id}`} target="_blank" rel="noopener noreferrer" data-sound="click" className="snap-center group block relative w-[300px] md:w-[450px] shrink-0 rounded-3xl overflow-hidden border border-white/5 bg-[#15151c] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-all duration-500 ease-out">
                 <div className="relative w-full aspect-video overflow-hidden">
-                  <img src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`} onError={(e) => { e.currentTarget.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`; }} alt={video.title} className="w-full h-full object-cover filter brightness-[0.7] saturate-50 group-hover:brightness-100 group-hover:saturate-100 transition-all duration-700 group-hover:scale-110" loading="lazy" />
+                  <Image unoptimized width={1280} height={720} src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`} onError={(e) => { e.currentTarget.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`; }} alt={`${video.title} by ${video.artist}`} className="w-full h-full object-cover filter brightness-[0.7] saturate-50 group-hover:brightness-100 group-hover:saturate-100 transition-all duration-700 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <div className="w-20 h-20 bg-[#d4a857] rounded-full flex items-center justify-center text-black scale-50 opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-500 ease-out box-glow">▶</div>
                   </div>
