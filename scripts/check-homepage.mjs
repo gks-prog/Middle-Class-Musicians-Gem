@@ -16,11 +16,22 @@ assert(home.includes('name="viewport"'));
 assert(home.includes('rel="canonical"'));
 assert(home.includes("2ig5EfQ69dRmQu5qb"));
 for (const name of ["artist-solution", "creative-atmosphere", "happy-clients", "type-beats"]) {
-  const asset = await stat("public/images/hero/" + name + ".webp");
+  const asset = await stat("public/images/hero/" + name + "-realistic.webp");
   assert(asset.size < 150000, name + " image budget");
-  assert(home.includes(name + ".webp"));
+  assert(home.includes(name + "-realistic.webp"));
 }
 const proof = JSON.parse(await readFile("src/content/social-proof.json", "utf8"));
+const reviewSection = home.match(/<section id="google-reviews"[\s\S]*?<\/section>/)?.[0];
+assert(reviewSection, "Inline Google reviews section exists");
+assert(!reviewSection.includes("<a "), "Reviews do not redirect visitors off-site");
+assert(reviewSection.includes("review-track"), "Reviews have an inline sliding track, even before import");
+assert(reviewSection.includes("review-float"), "Review cards float");
+assert(!home.includes("Client films are coming soon."));
+assert.equal((home.match(/data-testimonial-placeholder="true"/g) || []).length, Math.max(0, 4 - proof.testimonials.length), "Four video slots remain available");
+if (proof.reviews.length === 0) {
+  assert(reviewSection.includes("Verified Google review content is awaiting import."));
+  assert(!reviewSection.includes("out of 5 stars"), "Empty slots must not invent star ratings");
+}
 for (const review of proof.reviews) {
   assert(review.author && review.text && review.sourceUrl && review.publishedDate, "Review attribution is required");
   assert(Number.isInteger(review.rating) && review.rating >= 1 && review.rating <= 5, "Valid rating");

@@ -61,7 +61,7 @@ export default function HeroCarousel() {
         touchStart.current = null;
       }} onTouchCancel={() => { touchStart.current = null; }}>
       {slides.map((slide, index) => <div key={slide.image} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${slides.length}`} aria-hidden={active !== index} inert={active !== index} className="hero-panel relative flex w-full shrink-0 items-center">
-        <Image src={`/images/hero/${slide.image}.webp`} alt="" fill preload={index === 0} sizes="100vw" className="object-cover object-[65%_center] lg:object-center" />
+        <Image src={`/images/hero/${slide.image}-realistic.webp`} alt="" fill preload={index === 0} sizes="100vw" className="object-cover object-[65%_center] lg:object-center" />
         <div className="hero-shade absolute inset-0" />
         <div className="container relative mx-auto px-6 pb-28 pt-32 sm:px-10 lg:pb-32 lg:pt-36">
           <p className="mb-7 text-[10px] font-bold uppercase tracking-[0.2em] text-[#e4bd79] sm:text-xs">Uttam Nagar, New Delhi <span aria-hidden="true">/</span> Est. 2019</p>
