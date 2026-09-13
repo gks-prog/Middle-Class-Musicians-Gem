@@ -4,7 +4,6 @@ import Navbar from "@/components/global/Navbar";
 import Footer from "@/components/global/Footer";
 import AudioEngine from "@/components/global/AudioEngine";
 import FloatingCTA from "@/components/global/FloatingCTA";
-import Preloader from "@/components/global/Preloader";
 import FloatingNotes from "@/components/global/FloatingNotes";
 import StructuredData from "@/components/global/StructuredData";
 import { absoluteUrl, siteConfig } from "@/lib/site";
@@ -14,7 +13,8 @@ import "./globals.css";
 const bebasNeue = Bebas_Neue({ 
   weight: "400", 
   subsets: ["latin"], 
-  variable: "--font-head" 
+  variable: "--font-head",
+  display: "swap",
 });
 
 const montserrat = Montserrat({ 
@@ -86,6 +86,9 @@ export default function RootLayout({
       description: siteConfig.description,
       telephone: siteConfig.phoneE164,
       logo: absoluteUrl("/icon.svg"),
+      foundingDate: "2019",
+      hasMap: siteConfig.maps,
+      knowsAbout: ["Recording", "Music production", "Mixing and mastering", "Custom type beats", "Artist management", "Video production"],
       address: {
         "@type": "PostalAddress",
         streetAddress: siteConfig.address.locality,
@@ -98,19 +101,22 @@ export default function RootLayout({
         "@type": "City",
         name: "New Delhi",
       },
-      sameAs: [siteConfig.instagram, siteConfig.maps],
+      sameAs: [siteConfig.instagram, siteConfig.maps, siteConfig.googleReviews],
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Studio services",
         itemListElement: [
           "Vocal Recording",
+          "Music Production",
           "Mixing and Mastering",
           "Beat Production",
           "Songwriting",
           "Music Production Courses",
+          "Artist Management",
+          "Video Production",
         ].map((name) => ({
           "@type": "Offer",
-          itemOffered: { "@type": "Service", name },
+          itemOffered: { "@type": "Service", name, provider: { "@id": `${siteConfig.url}/#studio` }, areaServed: "New Delhi", url: absoluteUrl(name === "Music Production Courses" ? "/courses" : "/services") },
         })),
       },
     },
@@ -131,7 +137,6 @@ export default function RootLayout({
       <body className={`${bebasNeue.variable} ${montserrat.variable} font-body bg-bgPrimary text-textPrimary antialiased selection:bg-[#d4a857] selection:text-black min-h-screen flex flex-col`}>
         <a href="#main-content" className="skip-link">Skip to content</a>
         <StructuredData data={structuredData} />
-        <Preloader />
         <AudioEngine />
         <FloatingNotes />
         <Navbar />

@@ -1,0 +1,93 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { siteConfig } from "@/lib/site";
+
+const slides = [
+  { image: "artist-solution", label: "Everything for your next release", title: "One-stop solution", accent: "for artists.", copy: "Recording, music production, mixing & mastering, courses, artist management, and video production. Your vision, supported from the first idea to the final release." },
+  { image: "creative-atmosphere", label: "Space to find your sound", title: "An atmosphere where", accent: "creativity breathes.", copy: "Bring your ideas. Find your flow. Create music in an atmosphere that lets your own sound take centre stage." },
+  { image: "happy-clients", label: "Growing with independent artists", title: "500+ happy clients.", accent: "7+ years of music.", copy: "From first-time recording artists to the next release, Middle Class Musicians is part of the journey. Based in Uttam Nagar, New Delhi." },
+  { image: "type-beats", label: "Made around your identity", title: "Your sound.", accent: "Your type beats.", copy: "Tell us your genre, mood, and reference artists. Let’s shape custom beat production around the music you want to make." },
+];
+
+export default function HeroCarousel() {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(true);
+  const [hidden, setHidden] = useState(false);
+  const touchStart = useRef<number | null>(null);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const syncMotion = () => setReducedMotion(media.matches);
+    const syncVisibility = () => setHidden(document.hidden);
+    syncMotion();
+    syncVisibility();
+    media.addEventListener("change", syncMotion);
+    document.addEventListener("visibilitychange", syncVisibility);
+    return () => {
+      media.removeEventListener("change", syncMotion);
+      document.removeEventListener("visibilitychange", syncVisibility);
+    };
+  }, []);
+
+  const stopped = paused || hovered || focused || reducedMotion || hidden;
+  useEffect(() => {
+    if (stopped) return;
+    const timer = window.setInterval(() => setActive((index) => (index + 1) % slides.length), 7000);
+    return () => window.clearInterval(timer);
+  }, [stopped]);
+
+  const goTo = (index: number) => {
+    setActive((index + slides.length) % slides.length);
+    setPaused(true);
+  };
+
+  return <section aria-label="Meet Middle Class Musicians" aria-roledescription="carousel" className="hero-carousel relative overflow-hidden bg-[#07070a]"
+    onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+    onFocusCapture={() => setFocused(true)} onBlurCapture={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false); }}>
+    <h1 className="sr-only">Middle Class Musicians — recording and music production studio in Uttam Nagar, New Delhi</h1>
+    <div className="hero-slides flex transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${active * 100}%)`, touchAction: "pan-y" }}
+      onTouchStart={(event) => { touchStart.current = event.touches[0].clientX; }}
+      onTouchEnd={(event) => {
+        if (touchStart.current !== null) {
+          const distance = touchStart.current - event.changedTouches[0].clientX;
+          if (Math.abs(distance) > 50) goTo(active + (distance > 0 ? 1 : -1));
+        }
+        touchStart.current = null;
+      }} onTouchCancel={() => { touchStart.current = null; }}>
+      {slides.map((slide, index) => <div key={slide.image} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${slides.length}`} aria-hidden={active !== index} inert={active !== index} className="hero-panel relative flex w-full shrink-0 items-center">
+        <Image src={`/images/hero/${slide.image}.webp`} alt="" fill preload={index === 0} sizes="100vw" className="object-cover object-[65%_center] lg:object-center" />
+        <div className="hero-shade absolute inset-0" />
+        <div className="container relative mx-auto px-6 pb-28 pt-32 sm:px-10 lg:pb-32 lg:pt-36">
+          <p className="mb-7 text-[10px] font-bold uppercase tracking-[0.2em] text-[#e4bd79] sm:text-xs">Uttam Nagar, New Delhi <span aria-hidden="true">/</span> Est. 2019</p>
+          <p className="mb-4 font-head text-lg tracking-widest text-white/75">{slide.label}</p>
+          <h2 className="max-w-3xl font-head text-[clamp(3.2rem,6.7vw,6.5rem)] leading-[0.98] tracking-tight"><span className="block">{slide.title}</span><span className="block text-[#e4bd79]">{slide.accent}</span></h2>
+          <p className="mb-8 mt-6 max-w-lg text-sm leading-7 text-gray-200 sm:text-base">{slide.copy}</p>
+          <div className="flex flex-wrap gap-3">
+            <a href={`${siteConfig.whatsapp}?text=${encodeURIComponent("Hi MCM, I’d like to discuss a studio session.")}`} target="_blank" rel="noopener noreferrer" className="button-primary">Book a session ↗</a>
+            <Link href="/services" className="button-secondary">Explore services</Link>
+          </div>
+        </div>
+      </div>)}
+    </div>
+    <div className="absolute inset-x-0 bottom-[4.5rem] z-10">
+      <div className="container mx-auto flex flex-wrap items-center gap-2 px-6 sm:px-10">
+        <button className="carousel-control" aria-label="Previous hero slide" onClick={() => goTo(active - 1)}>←</button>
+        <button className="carousel-control" aria-label="Next hero slide" onClick={() => goTo(active + 1)}>→</button>
+        <div className="mx-2 flex gap-1" aria-label="Choose hero slide">{slides.map((slide, index) => <button key={slide.image} onClick={() => goTo(index)} aria-label={`Show slide ${index + 1}: ${slide.label}`} aria-pressed={active === index} className="flex h-11 w-7 items-center justify-center"><span className={`h-1 rounded-full transition-all ${active === index ? "w-7 bg-[#e4bd79]" : "w-3 bg-white/40"}`} /></button>)}</div>
+        {!reducedMotion && <button onClick={() => setPaused(!paused)} aria-pressed={paused} className="min-h-11 px-3 text-xs text-gray-200">{paused ? "Play slideshow" : "Pause slideshow"}</button>}
+        <span className="sr-only" aria-live={stopped ? "polite" : "off"}>Slide {active + 1} of {slides.length}: {slides[active].label}</span>
+      </div>
+    </div>
+    <div className="overflow-hidden border-y border-[#d4a857]/20 bg-[#0c0c10] py-4" aria-label="Recording, mixing, mastering, beat production, video production, artist management and courses">
+      <div className="service-strip flex w-max font-head text-xl tracking-widest text-[#d4a857] sm:text-2xl" style={{ animationPlayState: stopped ? "paused" : "running" }} aria-hidden="true">
+        {[0, 1].map((copy) => <span key={copy} className="shrink-0 whitespace-nowrap pr-8">Recording ✦ Mixing ✦ Mastering ✦ Beat Production ✦ Video Production ✦ Artist Management ✦ Courses ✦ </span>)}
+      </div>
+    </div>
+  </section>;
+}

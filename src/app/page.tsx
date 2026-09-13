@@ -7,7 +7,10 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import StructuredData from "@/components/global/StructuredData";
-import { siteConfig } from "@/lib/site";
+import HeroCarousel from "@/components/home/HeroCarousel";
+import GoogleReviews from "@/components/home/GoogleReviews";
+import VideoTestimonials from "@/components/home/VideoTestimonials";
+import { absoluteUrl, siteConfig } from "@/lib/site";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,7 +24,7 @@ const portfolioVideos = [
 const faqs = [
   {
     question: "What services does Middle Class Musicians offer?",
-    answer: "MCM Studio offers vocal recording, mixing and mastering, custom beat production, songwriting support, and music production courses.",
+    answer: "MCM Studio in Uttam Nagar, New Delhi offers recording, music production, mixing and mastering, custom type beats, music production courses, artist management, and video production.",
   },
   {
     question: "Where is MCM Studio located?",
@@ -43,22 +46,11 @@ const faqs = [
 
 export default function Home() {
   const container = useRef<HTMLDivElement>(null);
-  const textMarqueeRef = useRef<HTMLDivElement>(null);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     const media = gsap.matchMedia();
     media.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.from(".hero-text-line", {
-        y: 100, opacity: 0, rotationX: -24, filter: "blur(10px)",
-        duration: 1.15, stagger: 0.12, ease: "power4.out", delay: 0.1,
-      });
-      gsap.from(".hero-fade", {
-        opacity: 0, y: 24, filter: "blur(4px)", duration: 0.9, stagger: 0.1, ease: "power3.out", delay: 0.65,
-      });
-      if (textMarqueeRef.current) {
-        gsap.to(textMarqueeRef.current, { xPercent: -50, ease: "none", duration: 28, repeat: -1 });
-      }
       gsap.utils.toArray<HTMLElement>(".section-reveal").forEach((elem) => {
         gsap.from(elem, {
           scrollTrigger: { trigger: elem, start: "top 88%", once: true },
@@ -81,7 +73,14 @@ export default function Home() {
       <StructuredData
         data={{
           "@context": "https://schema.org",
-          "@type": "FAQPage",
+          "@type": ["WebPage", "FAQPage"],
+          "@id": absoluteUrl("/#webpage"),
+          url: siteConfig.url,
+          name: "Middle Class Musicians — recording studio in Uttam Nagar, New Delhi",
+          description: siteConfig.description,
+          isPartOf: { "@id": absoluteUrl("/#website") },
+          about: { "@id": absoluteUrl("/#studio") },
+          inLanguage: "en-IN",
           mainEntity: faqs.map((faq) => ({
             "@type": "Question",
             name: faq.question,
@@ -90,43 +89,8 @@ export default function Home() {
         }}
       />
       
-      {/* HERO SECTION */}
-      <section className="relative flex min-h-[92svh] flex-col items-center justify-center pb-32 pt-24 text-center">
-        {/* Animated Glow Core */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(212,168,87,0.12),transparent_70%)] pointer-events-none animate-pulse duration-[4000ms]" />
-        
-        <div className="container relative z-10 px-6 perspective-1000">
-          <div className="hero-fade inline-block px-5 py-1.5 border border-[#d4a857]/20 rounded-full text-xs tracking-[0.2em] text-[#d4a857] mb-8 font-head uppercase bg-[#15151c]/50 backdrop-blur-md shadow-[0_0_20px_rgba(212,168,87,0.1)]">
-            Uttam Nagar, New Delhi · Est. 2019
-          </div>
-          
-          <h1 className="text-[clamp(4rem,12vw,10rem)] font-head leading-[0.85] mb-6">
-            <span className="block text-white hero-text-line">RECORD.</span>
-            <span className="block text-gray-300 hero-text-line">CREATE.</span>
-            <span className="block text-[#d4a857] hero-text-line text-glow">PERFORM.</span>
-          </h1>
-          
-          <p className="hero-fade text-gray-400 max-w-lg mx-auto text-lg mb-12 font-medium">
-            Vocal recording, mixing, mastering, and beat production in Uttam Nagar, New Delhi. Built for sound. Designed for vision.
-          </p>
-
-          <div className="hero-fade flex flex-col sm:flex-row gap-5 justify-center">
-            <a href={`${siteConfig.whatsapp}?text=Hi%20MCM%2C%20I%20want%20to%20book%20a%20studio%20session.`} target="_blank" rel="noopener noreferrer" data-sound="click" className="button-primary shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(212,168,87,0.45)]">
-              Book Session
-            </a>
-            <Link href="/studio" data-sound="hover" className="button-secondary">
-              View Studio
-            </Link>
-          </div>
-        </div>
-
-        <div className="absolute bottom-0 left-0 w-full overflow-hidden border-y border-[#d4a857]/10 bg-[#0c0c10]/90 backdrop-blur py-4 flex box-glow">
-          <div ref={textMarqueeRef} className="flex w-max gap-8 font-head text-2xl tracking-widest text-[#d4a857]/80 uppercase whitespace-nowrap">
-            <span>Recording ✦ Mixing ✦ Mastering ✦ Beat Production ✦ Video Production ✦ Artist Management ✦</span>
-            <span>Recording ✦ Mixing ✦ Mastering ✦ Beat Production ✦ Video Production ✦ Artist Management ✦</span>
-          </div>
-        </div>
-      </section>
+      <HeroCarousel />
+      <GoogleReviews />
 
       {/* ECOSYSTEM FUNNEL */}
       <section className="py-32 relative bg-[#07070a]">
@@ -177,7 +141,7 @@ export default function Home() {
 
           <div ref={sliderRef} className="flex gap-8 overflow-x-auto snap-x snap-mandatory px-6 md:px-24 pb-12 pt-4 scrollbar-hide">
             {portfolioVideos.map((video, idx) => (
-              <a key={idx} href={`https://youtu.be/${video.id}`} target="_blank" rel="noopener noreferrer" data-sound="click" className="snap-center group block relative w-[300px] md:w-[450px] shrink-0 rounded-3xl overflow-hidden border border-white/5 bg-[#15151c] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-all duration-500 ease-out">
+              <a key={idx} href={`https://youtu.be/${video.id}`} target="_blank" rel="noopener noreferrer" data-sound="click" className="snap-center group block relative w-[min(300px,82vw)] md:w-[450px] shrink-0 rounded-3xl overflow-hidden border border-white/5 bg-[#15151c] hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] transition-all duration-500 ease-out">
                 <div className="relative w-full aspect-video overflow-hidden">
                   <Image src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`} onError={(e) => { e.currentTarget.src = `https://img.youtube.com/vi/${video.id}/hqdefault.jpg`; }} alt={`${video.title} by ${video.artist} — music video`} fill sizes="(max-width: 767px) 300px, 450px" className="object-cover filter brightness-[0.7] saturate-50 group-hover:brightness-100 group-hover:saturate-100 transition-all duration-700 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -216,6 +180,8 @@ export default function Home() {
           </ol>
         </div>
       </section>
+
+      <VideoTestimonials />
 
       <section className="border-y border-white/5 bg-[#0c0c10] py-24 sm:py-32" id="frequently-asked-questions">
         <div className="container mx-auto grid gap-14 px-6 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">

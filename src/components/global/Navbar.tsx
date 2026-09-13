@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SoundToggle from "./SoundToggle";
-import AuthNav from "./AuthNav";
 import { siteConfig } from "@/lib/site";
 
 const navLinks = [
@@ -75,7 +74,6 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-            <AuthNav />
           </nav>
 
           <div className="relative z-50 flex items-center gap-2">
@@ -130,7 +128,6 @@ export default function Navbar() {
               <span className="font-body text-[10px] tracking-widest text-gray-600">0{index + 1}</span>
             </Link>
           ))}
-          <AuthNav mobile onNavigate={() => setIsOpen(false)} />
           <a
             href={`${siteConfig.whatsapp}?text=Hi%20MCM%2C%20I%20want%20to%20book%20a%20studio%20session.`}
             target="_blank"

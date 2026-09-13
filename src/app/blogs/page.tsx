@@ -4,7 +4,6 @@ import { useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import StudioTalk from "@/components/community/StudioTalk";
 
 export default function BlogsPage() {
   const container = useRef<HTMLDivElement>(null);
@@ -13,12 +12,11 @@ export default function BlogsPage() {
   }, { scope: container });
 
   return <div ref={container} className="min-h-screen pb-32 pt-32">
-    <section className="container mx-auto mb-24 max-w-3xl px-6 text-center"><span className="blog-anim mb-4 block font-head text-sm uppercase tracking-[0.2em] text-[#d4a857]">Insights & Knowledge</span><h1 className="blog-anim mb-6 font-head text-5xl leading-none md:text-7xl">The MCM <span className="text-[#d4a857]">Journal.</span></h1><p className="blog-anim text-lg text-gray-400">Select a discipline for specialized insights, or join the live studio discussion below.</p></section>
+    <section className="container mx-auto mb-24 max-w-3xl px-6 text-center"><span className="blog-anim mb-4 block font-head text-sm uppercase tracking-[0.2em] text-[#d4a857]">Insights & Knowledge</span><h1 className="blog-anim mb-6 font-head text-5xl leading-none md:text-7xl">The MCM <span className="text-[#d4a857]">Journal.</span></h1><p className="blog-anim text-lg text-gray-400">Recording advice, production techniques, and practical ideas for your next session. Choose your discipline to start reading.</p></section>
     <section className="container mx-auto mb-32 max-w-5xl px-6"><div className="grid grid-cols-1 gap-8 md:grid-cols-2">
       <JournalCard href="/blogs/rappers" title="For Rappers">Vocal pacing, recording confidence, cohesive mixes and studio etiquette.</JournalCard>
       <JournalCard href="/blogs/producers" title="For Producers">Low-end theory, acoustic treatment, plugin myths and beat arrangements.</JournalCard>
     </div></section>
-    <StudioTalk />
   </div>;
 }
 

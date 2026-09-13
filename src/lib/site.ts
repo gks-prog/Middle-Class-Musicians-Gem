@@ -3,12 +3,13 @@ export const siteConfig = {
   shortName: "MCM Studio",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://middleclassmusicians.in",
   description:
-    "Recording studio in Uttam Nagar, New Delhi for vocal recording, mixing, mastering, beat production, songwriting, and music production courses.",
+    "Middle Class Musicians in Uttam Nagar, New Delhi: recording, music production, mixing and mastering, custom beats, courses, artist management and video production.",
   phoneDisplay: "+91 93157 78147",
   phoneE164: "+919315778147",
   whatsapp: "https://wa.me/919315778147",
   instagram: "https://instagram.com/middleclassmusicians",
   maps: "https://maps.app.goo.gl/47Ez6RdTwQ1ZUizU7",
+  googleReviews: "https://share.google/2ig5EfQ69dRmQu5qb",
   address: {
     locality: "Uttam Nagar",
     city: "New Delhi",

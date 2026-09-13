@@ -34,7 +34,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full bg-[#0c0c10] border-t border-white/5 relative z-10">
+    <footer id="contact" className="w-full bg-[#0c0c10] border-t border-white/5 relative z-10">
       
       {/* 1. GLOBAL CONTACT FUNNEL */}
       <div className="container mx-auto px-6 pt-24 pb-16 border-b border-white/5">
@@ -64,6 +64,7 @@ export default function Footer() {
               <option value="Recording & Mixing">Recording & Mixing</option>
               <option value="Beat Production">Beat Production</option>
               <option value="Video Production">Video Production</option>
+              <option value="Artist Management">Artist Management</option>
               <option value="Music Courses">Academy / Courses</option>
             </select>
             <label htmlFor="footer-message" className="sr-only">Project details</label>
@@ -100,7 +101,7 @@ export default function Footer() {
 
           <div className="flex justify-start md:justify-end lg:col-span-1">
             <div className="w-full max-w-sm h-56 rounded-3xl overflow-hidden border border-white/5 bg-[#15151c] relative group cursor-pointer shadow-xl" data-sound="hover">
-              <iframe title="Map showing Middle Class Musicians in Uttam Nagar, New Delhi" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d224098.81604169542!2d76.9531792!3d28.6469655!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd5b347eb62d%3A0x37205b715389640!2sDelhi!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0, pointerEvents: "none", filter: "grayscale(100%) invert(92%) contrast(83%)" }} allowFullScreen={false} loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700 block" />
+              <div className="flex h-full flex-col justify-center bg-[radial-gradient(ellipse_at_top_right,rgba(212,168,87,0.16),transparent_75%)] p-7 pb-16"><span className="eyebrow mb-3">Find your session</span><p className="font-head text-3xl">Uttam Nagar</p><address className="mt-2 text-sm not-italic text-gray-300">New Delhi, Delhi 110059, India</address></div>
               <a href={siteConfig.maps} aria-label="Open Middle Class Musicians location in Google Maps" target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-10 flex items-end justify-end p-4">
                 <span className="px-4 py-2 bg-black/80 backdrop-blur-md border border-white/10 rounded-lg text-[10px] font-bold uppercase tracking-widest text-[#d4a857] group-hover:text-white group-hover:bg-[#d4a857]/20 transition-all">Open Maps ↗</span>
               </a>

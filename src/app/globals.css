@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+.hero-panel { min-height: clamp(44rem, 88svh, 58rem); }
+.hero-shade { background: linear-gradient(90deg, rgba(7,7,10,.94) 0%, rgba(7,7,10,.78) 32%, rgba(7,7,10,.12) 78%), linear-gradient(0deg, #07070a 0%, transparent 22%); }
+.carousel-control { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid #ffffff40; border-radius: 50%; background: #07070a80; }
+.carousel-control:hover { background: #d4a857; color: #07070a; }
+.service-strip { animation: seamless-loop 32s linear infinite; }
+.review-track { animation: seamless-loop 48s linear infinite; }
+.review-window { scrollbar-width: none; max-width: 1536px; margin-inline: auto; }
+.review-window::-webkit-scrollbar { display: none; }
+.review-marquee:hover .review-track,
+.review-marquee:focus-within .review-track,
+.review-marquee.is-paused .review-track { animation-play-state: paused; }
+@keyframes seamless-loop { to { transform: translateX(-50%); } }
+@media (max-width: 767px) {
+  .hero-shade { background: linear-gradient(90deg, #07070aed, #07070a65), linear-gradient(0deg, #07070a 0%, transparent 60%); }
+  .hero-panel { min-height: 48rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .service-strip, .review-track { animation: none !important; }
+  .review-group[aria-hidden="true"], .review-group > [aria-hidden="true"] { display: none; }
+}
+
 @layer base {
   :root {
     color-scheme: dark;
