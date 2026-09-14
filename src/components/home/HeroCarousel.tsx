@@ -69,7 +69,7 @@ export default function HeroCarousel() {
       </div>
     </div>
     <div className="overflow-hidden border-y border-[#d4a857]/20 bg-[#0c0c10] py-4" aria-label="Recording, mixing, mastering, beat production, video production, artist management and courses">
-      <div className="service-strip flex w-max font-head text-xl tracking-widest text-[#d4a857] sm:text-2xl" style={{ animationPlayState: stopped ? "paused" : "running" }} aria-hidden="true">
+      <div className="service-strip flex w-max font-head text-xl tracking-widest text-[#d4a857] sm:text-2xl" aria-hidden="true">
         {[0, 1].map((copy) => <span key={copy} className="shrink-0 whitespace-nowrap pr-8">Recording ✦ Mixing ✦ Mastering ✦ Beat Production ✦ Video Production ✦ Artist Management ✦ Courses ✦ </span>)}
       </div>
     </div>
