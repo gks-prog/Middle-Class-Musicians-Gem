@@ -15,11 +15,12 @@ assert(!schemas.some((schema) => schema.aggregateRating), "No unsupported self-s
 assert(home.includes('name="viewport"'));
 assert(home.includes('rel="canonical"'));
 assert(home.includes("2ig5EfQ69dRmQu5qb"));
-for (const name of ["artist-solution", "creative-atmosphere", "happy-clients", "type-beats"]) {
-  const asset = await stat("public/images/hero/" + name + "-realistic.webp");
-  assert(asset.size < 150000, name + " image budget");
-  assert(home.includes(name + "-realistic.webp"));
+for (const name of ["studio-overview", "mic-closeup", "recording-session", "production-corner", "keys-closeup"]) {
+  const asset = await stat("public/images/studio/" + name + ".webp");
+  assert(asset.size < 250000, name + " image budget");
+  assert(home.includes(name + ".webp"));
 }
+assert(!home.includes("-realistic.webp"), "Generated concept photos replaced");
 const proof = JSON.parse(await readFile("src/content/social-proof.json", "utf8"));
 const reviewSection = home.match(/<section id="google-reviews"[\s\S]*?<\/section>/)?.[0];
 assert(reviewSection, "Inline Google reviews section exists");
@@ -33,11 +34,16 @@ if (proof.reviews.length === 0) {
   assert(!reviewSection.includes("out of 5 stars"), "Empty slots must not invent star ratings");
 }
 for (const review of proof.reviews) {
-  assert(review.author && review.text && review.sourceUrl && review.publishedDate, "Review attribution is required");
+  assert(review.author && review.text && review.sourceUrl && review.dateLabel && review.sourceScreenshot, "Review attribution is required");
   assert(Number.isInteger(review.rating) && review.rating >= 1 && review.rating <= 5, "Valid rating");
   const host = new URL(review.sourceUrl).hostname;
   assert(host === "share.google" || host === "maps.app.goo.gl" || host === "google.com" || host.endsWith(".google.com"), "Original Google source");
 }
+assert.equal(proof.reviews.length, 13, "All supplied review screenshots included");
+assert.equal(proof.reviews.find((r) => r.author === "Kartik Singla")?.rating, 4, "Preserve the supplied four-star review");
+assert(!reviewSection.includes("data-review-placeholder"), "Real reviews replace empty cards");
+assert(reviewSection.includes("4 out of 5 stars"));
+assert(reviewSection.includes("at time of capture"), "Relative dates are not presented as live dates");
 for (const video of proof.testimonials) {
   assert(video.clientName && video.title && video.videoSrc && video.poster && video.captionsSrc && video.transcript, "Accessible, attributed video");
 }

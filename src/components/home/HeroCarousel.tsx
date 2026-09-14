@@ -6,10 +6,11 @@ import Link from "next/link";
 import { siteConfig } from "@/lib/site";
 
 const slides = [
-  { image: "artist-solution", label: "Everything for your next release", title: "One-stop solution", accent: "for artists.", copy: "Recording, music production, mixing & mastering, courses, artist management, and video production. Your vision, supported from the first idea to the final release." },
-  { image: "creative-atmosphere", label: "Space to find your sound", title: "An atmosphere where", accent: "creativity breathes.", copy: "Bring your ideas. Find your flow. Create music in an atmosphere that lets your own sound take centre stage." },
-  { image: "happy-clients", label: "Growing with independent artists", title: "500+ happy clients.", accent: "7+ years of music.", copy: "From first-time recording artists to the next release, Middle Class Musicians is part of the journey. Based in Uttam Nagar, New Delhi." },
-  { image: "type-beats", label: "Made around your identity", title: "Your sound.", accent: "Your type beats.", copy: "Tell us your genre, mood, and reference artists. Let’s shape custom beat production around the music you want to make." },
+  { image: "studio-overview", alt: "Middle Class Musicians control room with keyboards, microphone and studio monitors", position: "center", portrait: false, label: "Everything for your next release", title: "One-stop solution", accent: "for artists.", copy: "Recording, music production, mixing & mastering, courses, artist management, and video production. Your vision, supported from the first idea to the final release." },
+  { image: "mic-closeup", alt: "The studio’s RØDE microphone and pop filter", position: "55% center", portrait: false, label: "Space to find your sound", title: "An atmosphere where", accent: "creativity breathes.", copy: "Bring your ideas. Find your flow. Create music in an atmosphere that lets your own sound take centre stage." },
+  { image: "recording-session", alt: "A recording session inside Middle Class Musicians", position: "50% 58%", portrait: true, label: "Growing with independent artists", title: "500+ happy clients.", accent: "7+ years of music.", copy: "From first-time recording artists to the next release, Middle Class Musicians is part of the journey. Based in Uttam Nagar, New Delhi." },
+  { image: "keys-closeup", alt: "Keyboards and music production workstation inside the studio", position: "center", portrait: false, label: "Made around your identity", title: "Your sound.", accent: "Your type beats.", copy: "Tell us your genre, mood, and reference artists. Let’s shape custom beat production around the music you want to make." },
+  { image: "production-corner", alt: "The studio production desk under blue lighting", position: "50% 60%", portrait: true, label: "Inside Middle Class Musicians", title: "Your next idea.", accent: "Starts here.", copy: "Take a look inside our Uttam Nagar studio, then tell us what you want to record, produce, or learn." },
 ];
 
 export default function HeroCarousel() {
@@ -60,14 +61,17 @@ export default function HeroCarousel() {
         }
         touchStart.current = null;
       }} onTouchCancel={() => { touchStart.current = null; }}>
-      {slides.map((slide, index) => <div key={slide.image} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${slides.length}`} aria-hidden={active !== index} inert={active !== index} className="hero-panel relative flex w-full shrink-0 items-center">
-        <Image src={`/images/hero/${slide.image}-realistic.webp`} alt="" fill preload={index === 0} sizes="100vw" className="object-cover object-[65%_center] lg:object-center" />
-        <div className="hero-shade absolute inset-0" />
-        <div className="container relative mx-auto px-6 pb-28 pt-32 sm:px-10 lg:pb-32 lg:pt-36">
+      {slides.map((slide, index) => <div key={slide.image} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${slides.length}`} aria-hidden={active !== index} inert={active !== index} className="hero-panel relative flex w-full shrink-0 flex-col items-center pt-20 lg:flex-row lg:pt-0">
+        <div className="relative h-64 w-full shrink-0 overflow-hidden sm:h-80 lg:absolute lg:inset-y-0 lg:right-0 lg:h-auto lg:w-[55%]">
+          <Image src={`/images/studio/${slide.image}.webp`} alt={slide.alt} fill preload={index === 0} sizes="(min-width: 1024px) 55vw, 100vw" className={slide.portrait ? "object-cover lg:object-contain" : "object-cover"} style={{ objectPosition: slide.position }} />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#07070a] via-transparent to-transparent lg:hidden" />
+        </div>
+        <div className="hero-shade pointer-events-none absolute inset-0 hidden lg:block" />
+        <div className="container relative mx-auto px-6 pb-36 pt-6 sm:px-10 lg:pb-32 lg:pt-36">
           <p className="mb-7 text-[10px] font-bold uppercase tracking-[0.2em] text-[#e4bd79] sm:text-xs">Uttam Nagar, New Delhi <span aria-hidden="true">/</span> Est. 2019</p>
           <p className="mb-4 font-head text-lg tracking-widest text-white/75">{slide.label}</p>
-          <h2 className="max-w-3xl font-head text-[clamp(3.2rem,6.7vw,6.5rem)] leading-[0.98] tracking-tight"><span className="block">{slide.title}</span><span className="block text-[#e4bd79]">{slide.accent}</span></h2>
-          <p className="mb-8 mt-6 max-w-lg text-sm leading-7 text-gray-200 sm:text-base">{slide.copy}</p>
+          <h2 className="max-w-3xl lg:max-w-[55%] font-head text-[clamp(3rem,5.5vw,5.5rem)] leading-[0.98] tracking-tight"><span className="block">{slide.title}</span><span className="block text-[#e4bd79]">{slide.accent}</span></h2>
+          <p className="mb-8 mt-6 max-w-lg lg:max-w-[44%] text-sm leading-7 text-gray-200 sm:text-base">{slide.copy}</p>
           <div className="flex flex-wrap gap-3">
             <a href={`${siteConfig.whatsapp}?text=${encodeURIComponent("Hi MCM, I’d like to discuss a studio session.")}`} target="_blank" rel="noopener noreferrer" className="button-primary">Book a session ↗</a>
             <Link href="/services" className="button-secondary">Explore services</Link>

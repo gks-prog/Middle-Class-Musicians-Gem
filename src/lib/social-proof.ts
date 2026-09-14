@@ -4,7 +4,8 @@ export type GoogleReview = {
   author: string;
   rating: number;
   text: string;
-  publishedDate: string;
+  dateLabel: string;
+  sourceScreenshot: string;
   sourceUrl: string;
 };
 

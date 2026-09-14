@@ -1,4 +1,109 @@
 {
-  "reviews": [],
+  "reviews": [
+    {
+      "author": "Harsh Lambert",
+      "rating": 5,
+      "text": "Genuine.\n\nI just finished a song with them, just amazing result.\nWill be working with them in future as well.",
+      "dateLabel": "4 months ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "d92d55e8-f012-4cc8-b730-08ad7a79de16.png"
+    },
+    {
+      "author": "Ashraf Ali",
+      "rating": 5,
+      "text": "Had a great experience at Middle Class Musicians Studio! Huge thanks to my brother, producer Wenon, for being so supportive, and also big love to my brother Bunny :)",
+      "dateLabel": "11 months ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "e800635e-e8a5-4eaf-8037-b881384ae18b.png"
+    },
+    {
+      "author": "Priyanshu Saini",
+      "rating": 5,
+      "text": "My first ever studio experience at middle class musician is damn amazing, they are very helpful and supports you like brothers👍 🔥 💗",
+      "dateLabel": "a year ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "a2e61228-c1bc-4d85-b008-d1196ae081d7.png"
+    },
+    {
+      "author": "Rohan Sharma",
+      "rating": 5,
+      "text": "The ambience is enjoyable and the equipment is gud. The overall experience is very pleasant and it is preferrable over others.",
+      "dateLabel": "2 years ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "ef3fe961-0c61-4835-90a8-6d47475d12b0.png"
+    },
+    {
+      "author": "Kunal Beatz",
+      "rating": 5,
+      "text": "Awesome studio ... Nice work ... Friendly people in the house... Full love full support 💗 💗 💗 💗",
+      "dateLabel": "3 years ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "cee62233-5253-4f88-83de-9af0c013e572.png"
+    },
+    {
+      "author": "Harsh Pawar",
+      "rating": 5,
+      "text": "Its a fun studio with gud quality equipment and patient staff.",
+      "dateLabel": "2 years ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "03822d9a-61f4-4330-9523-00d5d1b689ab.png"
+    },
+    {
+      "author": "pranjal singh",
+      "rating": 5,
+      "text": "Very comfortable and vibe space..\nThe team is great\nAnd they are very cooperative",
+      "dateLabel": "2 years ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "9e391269-a277-41e2-9754-ea240e4e52c2.png"
+    },
+    {
+      "author": "Rahul Thapa",
+      "rating": 5,
+      "text": "Sexy studio and best producer he mix so well and great output",
+      "dateLabel": "3 years ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "807264ea-9425-41da-9caa-5c81ad47750d.png"
+    },
+    {
+      "author": "Rinku Singh",
+      "rating": 5,
+      "text": "Good place to learn by professionals must recommend..",
+      "dateLabel": "4 years ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "f320055b-4b26-4d53-a62c-4dc598841292.png"
+    },
+    {
+      "author": "Varun singh",
+      "rating": 5,
+      "text": "Worth it",
+      "dateLabel": "a year ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "cc0036cc-da77-4cc0-a948-9b4b23caace3.png"
+    },
+    {
+      "author": "Kartik Singla",
+      "rating": 4,
+      "text": "bhot badia recording session tha as a beginner bhaiya ne bhot badia guide kara and thank you",
+      "dateLabel": "5 months ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "0e5ea841-263e-4d62-8e61-57dac2fe8fda.png"
+    },
+    {
+      "author": "Mr.Alfaaz",
+      "rating": 5,
+      "text": "Brother, I recorded in this studio and literally bro, I enjoyed it. You cannot find work of this level at this price and a studio like this. It's awesome recording there.",
+      "dateLabel": "3 years ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "fb56fd07-31cd-43f8-92d6-ab59d9c03042.png"
+    },
+    {
+      "author": "Lil Wish",
+      "rating": 5,
+      "text": "Full of hard work, Vroooooo 🔥 💀\nI learned something new on my first visit.\nCome check out my middle class studio 🎙️",
+      "dateLabel": "a year ago",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "sourceScreenshot": "1c2a1ac1-c74c-419f-ad9c-8baa55fc4db5.png"
+    }
+  ],
   "testimonials": []
 }
