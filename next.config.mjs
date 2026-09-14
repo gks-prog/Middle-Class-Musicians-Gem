@@ -3,6 +3,12 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   reactStrictMode: true,
+  async redirects() {
+    return [
+      { source: "/dashboard/:path*", destination: "/#contact", permanent: true },
+      { source: "/auth/:path*", destination: "/", permanent: true },
+    ];
+  },
   images: {
     remotePatterns: [
       {

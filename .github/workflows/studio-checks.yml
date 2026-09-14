@@ -1,0 +1,19 @@
+name: Studio checks
+on:
+  pull_request:
+  push:
+    branches: [main, codex/studio-home-refresh]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: node --experimental-strip-types --test scripts/cms-validation.test.mjs
+      - run: npm run check
