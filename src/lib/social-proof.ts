@@ -10,16 +10,12 @@ export type GoogleReview = {
 };
 
 export type VideoTestimonial = {
-  clientName: string;
+  id: string;
   title: string;
   videoSrc: string;
-  poster: string;
-  captionsSrc: string;
-  transcript: string;
 };
 
 // Only add verified Google review text and permission-cleared client videos.
 // No sample reviews, made-up ratings or portfolio videos used as testimonials.
 export const googleReviews: GoogleReview[] = content.reviews;
 export const videoTestimonials: VideoTestimonial[] = content.testimonials;
-export const instagramTestimonials: { id: string; url: string }[] = content.instagramTestimonials;

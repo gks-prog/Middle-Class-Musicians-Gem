@@ -105,10 +105,21 @@
       "sourceScreenshot": "1c2a1ac1-c74c-419f-ad9c-8baa55fc4db5.png"
     }
   ],
-  "testimonials": [],
-  "instagramTestimonials": [
-    { "id": "DLLGKqjSf0y", "url": "https://www.instagram.com/reel/DLLGKqjSf0y/" },
-    { "id": "DKma4eQCNh1", "url": "https://www.instagram.com/reel/DKma4eQCNh1/" },
-    { "id": "C4BGyY-vRSt", "url": "https://www.instagram.com/reel/C4BGyY-vRSt/" }
+  "testimonials": [
+    {
+      "id": "client-1",
+      "title": "Client testimonial 1",
+      "videoSrc": "https://res.cloudinary.com/pbekirv1/video/upload/v1789397909/Video-73380.mp4"
+    },
+    {
+      "id": "client-2",
+      "title": "Client testimonial 2",
+      "videoSrc": "https://res.cloudinary.com/pbekirv1/video/upload/v1789397908/Video-51840.mp4"
+    },
+    {
+      "id": "client-3",
+      "title": "Client testimonial 3",
+      "videoSrc": "https://res.cloudinary.com/pbekirv1/video/upload/v1789397909/Video-57978.mp4"
+    }
   ]
 }

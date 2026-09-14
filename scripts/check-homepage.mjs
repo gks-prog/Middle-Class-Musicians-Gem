@@ -28,13 +28,13 @@ assert(!reviewSection.includes("<a "), "Reviews do not redirect visitors off-sit
 assert(reviewSection.includes("review-track"), "Reviews have an inline sliding track, even before import");
 assert(reviewSection.includes("review-float"), "Review cards float");
 assert(!home.includes("Client films are coming soon."));
-assert.equal((home.match(/data-testimonial-placeholder="true"/g) || []).length, Math.max(0, 4 - proof.testimonials.length - proof.instagramTestimonials.length), "Unfilled video slots remain available");
-assert.equal(proof.instagramTestimonials.length, 3);
-for (const reel of proof.instagramTestimonials) {
-  assert.equal(reel.url, `https://www.instagram.com/reel/${reel.id}/`);
-  assert(home.includes(`data-instagram-testimonial="${reel.id}"`));
-  assert(home.includes(`${reel.url}embed/`));
-}
+const testimonialSection = home.match(/<section id="client-stories"[\s\S]*?<\/section>/)?.[0];
+assert(testimonialSection);
+assert(!testimonialSection.includes("<iframe"), "Native video replaces embeds");
+assert(!testimonialSection.includes("instagram.com"), "No Instagram testimonial redirects");
+assert(!testimonialSection.includes("data-testimonial-placeholder"), "No blank card");
+assert.equal((testimonialSection.match(/data-native-testimonial=/g) || []).length, 3);
+assert.equal(proof.testimonials.length, 3);
 if (proof.reviews.length === 0) {
   assert(reviewSection.includes("Verified Google review content is awaiting import."));
   assert(!reviewSection.includes("out of 5 stars"), "Empty slots must not invent star ratings");
@@ -54,7 +54,9 @@ assert(!reviewSection.includes("Reviews from our Google Business Profile"), "Scr
 assert(reviewSection.includes("review-avatar"), "Initials avatars appear beside reviewers");
 assert(!/Pause slideshow|Play slideshow|Pause reviews|Resume reviews/.test(home), "Manual playback buttons removed");
 for (const video of proof.testimonials) {
-  assert(video.clientName && video.title && video.videoSrc && video.poster && video.captionsSrc && video.transcript, "Accessible, attributed video");
+  assert(video.id && video.title && video.videoSrc, "Named native video");
+  assert.equal(new URL(video.videoSrc).hostname, "res.cloudinary.com");
+  assert(testimonialSection.includes(video.videoSrc));
 }
 const config = (await import("../next.config.mjs")).default;
 const redirects = await config.redirects();
