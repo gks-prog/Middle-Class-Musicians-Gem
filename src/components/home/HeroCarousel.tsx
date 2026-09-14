@@ -45,7 +45,6 @@ export default function HeroCarousel() {
       {slides.map((slide, index) => <div key={slide.image} role="group" aria-roledescription="slide" aria-label={`${index + 1} of ${slides.length}`} aria-hidden={active !== index} inert={active !== index} className="hero-panel relative flex w-full shrink-0 flex-col items-center pt-20 lg:flex-row lg:pt-0">
         <div className="hero-photo relative h-64 w-[calc(100%_-_2rem)] shrink-0 overflow-hidden sm:h-80 lg:absolute lg:inset-y-8 lg:right-6 lg:h-auto lg:w-[53%]">
           <Image src={`/images/studio/${slide.image}.webp`} alt={slide.alt} fill preload={index === 0} sizes="(min-width: 1024px) 55vw, 100vw" className={slide.portrait ? "object-cover lg:object-contain" : "object-cover"} style={{ objectPosition: slide.position }} />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#07070a] via-transparent to-transparent lg:hidden" />
         </div>
         <div className="hero-shade pointer-events-none absolute inset-0 hidden lg:block" />
         <div className="container relative mx-auto px-6 pb-36 pt-6 sm:px-10 lg:px-20 lg:pb-32 lg:pt-36">

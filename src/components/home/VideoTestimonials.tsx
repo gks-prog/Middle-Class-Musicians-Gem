@@ -26,8 +26,7 @@ function Preview({ video, paused, onOpen }: { video: VideoTestimonial; paused: b
   return <article data-native-testimonial={video.id} className="w-full max-w-sm min-w-0 overflow-hidden rounded-3xl border border-white/10 bg-[#15151c] shadow-[0_16px_48px_-24px_#000]">
     <button type="button" aria-haspopup="dialog" aria-label={`Watch ${video.title.toLowerCase()} with sound`} onClick={(event) => onOpen(ref.current?.currentTime ?? 0, event.currentTarget)} className="group relative block aspect-[9/16] w-full overflow-hidden text-left">
       <video ref={ref} data-source={video.videoSrc} muted loop playsInline preload="metadata" aria-hidden="true" tabIndex={-1} className="pointer-events-none h-full w-full object-cover" />
-      <span className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-gradient-to-t from-black/90 to-transparent px-5 pb-6 pt-16">
-        <span className="text-sm font-semibold text-white">{video.title}</span>
+      <span className="absolute inset-x-0 bottom-0 flex items-center justify-end gap-3 bg-gradient-to-t from-black/90 to-transparent px-5 pb-6 pt-16">
         <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/40 bg-black/40 text-white transition-colors group-hover:bg-[#d4a857] group-hover:text-black" aria-hidden="true">▶</span>
       </span>
     </button>
@@ -86,8 +85,8 @@ export default function VideoTestimonials() {
       const bounds = event.currentTarget.getBoundingClientRect();
       if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) close();
     }}>
-      <div className="flex items-center justify-between gap-4 px-5 py-3">
-        <h3 id="testimonial-modal-title" className="text-sm font-semibold">{active?.title ?? "Client testimonial"}</h3>
+      <div className="flex items-center justify-end gap-4 px-5 py-3">
+        <h3 id="testimonial-modal-title" className="sr-only">{active?.title ?? "Client testimonial"}</h3>
         <button type="button" autoFocus onClick={close} aria-label="Close testimonial" className="carousel-control shrink-0 text-2xl">×</button>
       </div>
       <video ref={player} controls playsInline preload="none" className="mx-auto aspect-[9/16] max-h-[76svh] w-full bg-black object-contain" aria-label={active?.title ?? "Client testimonial"} onLoadedMetadata={() => {
