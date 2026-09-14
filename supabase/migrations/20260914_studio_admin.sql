@@ -6,6 +6,7 @@ create table if not exists public.studio_admins (
 alter table public.studio_admins enable row level security;
 revoke all on public.studio_admins from anon, authenticated;
 grant select on public.studio_admins to authenticated;
+drop policy if exists "Admins can see their own membership" on public.studio_admins;
 create policy "Admins can see their own membership" on public.studio_admins
   for select to authenticated using (user_id = (select auth.uid()));
 
@@ -15,10 +16,11 @@ create table if not exists public.studio_content (
   version integer not null default 0,
   updated_at timestamptz not null default now()
 );
-insert into public.studio_content(758ee70b-fe72-471f-86ed-7811f3d3b42d) values(1) on conflict (user_id) do nothing;
+insert into public.studio_content(id) values(1) on conflict (id) do nothing;
 alter table public.studio_content enable row level security;
 revoke all on public.studio_content from anon, authenticated;
 grant select on public.studio_content to anon, authenticated;
+drop policy if exists "Published studio content is public" on public.studio_content;
 create policy "Published studio content is public" on public.studio_content
   for select to anon, authenticated using (true);
 
@@ -31,6 +33,7 @@ create table if not exists public.studio_content_history (
 alter table public.studio_content_history enable row level security;
 revoke all on public.studio_content_history from anon, authenticated;
 grant select on public.studio_content_history to authenticated;
+drop policy if exists "Only admins can read history" on public.studio_content_history;
 create policy "Only admins can read history" on public.studio_content_history
   for select to authenticated using (exists(select 1 from public.studio_admins where user_id = (select auth.uid())));
 
@@ -56,8 +59,15 @@ end;
 $$;
 revoke all on function public.publish_studio_content(jsonb, integer) from public, anon;
 grant execute on function public.publish_studio_content(jsonb, integer) to authenticated;
+
+-- Grant access to the account selected by the studio owner.
+-- This UUID must belong to an existing Auth user in this Supabase project.
+insert into public.studio_admins(user_id)
+values ('758ee70b-fe72-471f-86ed-7811f3d3b42d'::uuid)
+on conflict (user_id) do nothing;
+
+notify pgrst, 'reload schema';
 commit;
 
--- ONE-TIME: create an email/password user in Supabase Auth, then add their UUID:
--- insert into public.studio_admins(user_id) values ('ADMIN_USER_UUID');
--- Grant access only through this table; public signups can never self-promote.
+-- Setup complete. Sign in at /admin/login with this user's email/password.
+-- To add another admin later, insert their Auth UUID into studio_admins.
