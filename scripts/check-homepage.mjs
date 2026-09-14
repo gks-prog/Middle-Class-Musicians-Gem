@@ -28,7 +28,13 @@ assert(!reviewSection.includes("<a "), "Reviews do not redirect visitors off-sit
 assert(reviewSection.includes("review-track"), "Reviews have an inline sliding track, even before import");
 assert(reviewSection.includes("review-float"), "Review cards float");
 assert(!home.includes("Client films are coming soon."));
-assert.equal((home.match(/data-testimonial-placeholder="true"/g) || []).length, Math.max(0, 4 - proof.testimonials.length), "Four video slots remain available");
+assert.equal((home.match(/data-testimonial-placeholder="true"/g) || []).length, Math.max(0, 4 - proof.testimonials.length - proof.instagramTestimonials.length), "Unfilled video slots remain available");
+assert.equal(proof.instagramTestimonials.length, 3);
+for (const reel of proof.instagramTestimonials) {
+  assert.equal(reel.url, `https://www.instagram.com/reel/${reel.id}/`);
+  assert(home.includes(`data-instagram-testimonial="${reel.id}"`));
+  assert(home.includes(`${reel.url}embed/`));
+}
 if (proof.reviews.length === 0) {
   assert(reviewSection.includes("Verified Google review content is awaiting import."));
   assert(!reviewSection.includes("out of 5 stars"), "Empty slots must not invent star ratings");

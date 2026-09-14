@@ -105,5 +105,10 @@
       "sourceScreenshot": "1c2a1ac1-c74c-419f-ad9c-8baa55fc4db5.png"
     }
   ],
-  "testimonials": []
+  "testimonials": [],
+  "instagramTestimonials": [
+    { "id": "DLLGKqjSf0y", "url": "https://www.instagram.com/reel/DLLGKqjSf0y/" },
+    { "id": "DKma4eQCNh1", "url": "https://www.instagram.com/reel/DKma4eQCNh1/" },
+    { "id": "C4BGyY-vRSt", "url": "https://www.instagram.com/reel/C4BGyY-vRSt/" }
+  ]
 }

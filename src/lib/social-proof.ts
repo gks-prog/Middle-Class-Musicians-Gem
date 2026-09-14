@@ -22,3 +22,4 @@ export type VideoTestimonial = {
 // No sample reviews, made-up ratings or portfolio videos used as testimonials.
 export const googleReviews: GoogleReview[] = content.reviews;
 export const videoTestimonials: VideoTestimonial[] = content.testimonials;
+export const instagramTestimonials: { id: string; url: string }[] = content.instagramTestimonials;

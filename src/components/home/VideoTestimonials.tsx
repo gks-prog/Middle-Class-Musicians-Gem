@@ -1,4 +1,5 @@
-import { videoTestimonials } from "@/lib/social-proof";
+import { instagramTestimonials, videoTestimonials } from "@/lib/social-proof";
+import InstagramTestimonial from "./InstagramTestimonial";
 
 export default function VideoTestimonials() {
   return <section id="client-stories" aria-labelledby="testimonials-heading" className="border-t border-white/5 bg-[#101014] py-20 sm:py-28">
@@ -14,7 +15,8 @@ export default function VideoTestimonials() {
         </video>
         <div className="p-6"><h3 className="font-head text-2xl">{video.title}</h3><p className="mt-2 text-sm text-[#e4bd79]">{video.clientName}</p><details className="mt-5 text-sm text-gray-300"><summary className="cursor-pointer py-2">Read transcript</summary><p className="whitespace-pre-line pt-3 leading-7">{video.transcript}</p></details></div>
       </article>)}
-      {Array.from({ length: Math.max(0, 4 - videoTestimonials.length) }, (_, index) => <div key={`empty-${index}`} data-testimonial-placeholder="true" role="img" aria-label={`Empty client testimonial video container ${videoTestimonials.length + index + 1}`} className="relative aspect-[4/5] min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(145deg,#19191f,#0b0b0e)] shadow-[0_16px_48px_-24px_rgba(0,0,0,0.7)]"><span aria-hidden="true" className="absolute inset-4 rounded-xl border border-white/[0.035]" /></div>)}
+      {instagramTestimonials.map((reel, index) => <InstagramTestimonial key={reel.id} {...reel} number={videoTestimonials.length + index + 1} />)}
+      {Array.from({ length: Math.max(0, 4 - videoTestimonials.length - instagramTestimonials.length) }, (_, index) => <div key={`empty-${index}`} data-testimonial-placeholder="true" role="img" aria-label={`Empty client testimonial video container ${videoTestimonials.length + instagramTestimonials.length + index + 1}`} className="relative aspect-[4/5] min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-[linear-gradient(145deg,#19191f,#0b0b0e)] shadow-[0_16px_48px_-24px_rgba(0,0,0,0.7)]"><span aria-hidden="true" className="absolute inset-4 rounded-xl border border-white/[0.035]" /></div>)}
       </div>
     </div>
   </section>;

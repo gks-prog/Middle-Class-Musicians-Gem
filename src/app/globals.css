@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 .hero-panel { min-height: clamp(44rem, 88svh, 58rem); }
+.testimonial-dialog::backdrop { background: #000c; backdrop-filter: blur(8px); }
+.testimonial-dialog[open] { animation: testimonial-open 220ms ease-out; }
+@keyframes testimonial-open { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
 .hero-shade { background: linear-gradient(90deg, rgba(7,7,10,.94) 0%, rgba(7,7,10,.78) 32%, rgba(7,7,10,.12) 78%), linear-gradient(0deg, #07070a 0%, transparent 22%); }
 .carousel-control { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid #ffffff40; border-radius: 50%; background: #07070a80; }
 .carousel-control:hover { background: #d4a857; color: #07070a; }
