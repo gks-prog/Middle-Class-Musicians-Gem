@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { siteConfig } from "@/lib/site";
+import { InstagramIcon, PhoneIcon } from "./ContactIcons";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -88,8 +89,8 @@ export default function Footer() {
               Delhi’s recording studio for vocal tracking, mixing, mastering, and beat production. Built for sound. Designed for vision.
             </p>
             <div className="flex gap-8 text-xs font-bold tracking-[0.2em] uppercase text-gray-500">
-              <a href={siteConfig.instagram} data-sound="hover" target="_blank" rel="noopener noreferrer" className="hover:text-white hover:text-glow transition-all">Instagram</a>
-              <a href={`tel:${siteConfig.phoneE164}`} className="hover:text-white transition-all">Call</a>
+              <a href={siteConfig.instagram} data-sound="hover" target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-2 hover:text-white hover:text-glow transition-all"><InstagramIcon />Instagram</a>
+              <a href={`tel:${siteConfig.phoneE164}`} className="inline-flex min-h-11 items-center gap-2 hover:text-white transition-all"><PhoneIcon />Call</a>
             </div>
           </div>
 

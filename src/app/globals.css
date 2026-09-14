@@ -6,18 +6,22 @@
 .hero-shade { background: linear-gradient(90deg, rgba(7,7,10,.94) 0%, rgba(7,7,10,.78) 32%, rgba(7,7,10,.12) 78%), linear-gradient(0deg, #07070a 0%, transparent 22%); }
 .carousel-control { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1px solid #ffffff40; border-radius: 50%; background: #07070a80; }
 .carousel-control:hover { background: #d4a857; color: #07070a; }
+.side-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 20; background: #07070acc; backdrop-filter: blur(8px); box-shadow: 0 4px 20px #0006; }
+.hero-side-arrow { top: 13rem; }
+.hero-photo { border-radius: 1.5rem; box-shadow: 0 0 0 1px #ffffff0d, 0 12px 40px #0004; }
+@media (min-width: 640px) { .hero-side-arrow { top: 15rem; } }
+@media (min-width: 1024px) { .hero-side-arrow { top: calc(50% - 2rem); } }
 .service-strip { animation: seamless-loop 32s linear infinite; }
 .review-track { animation: seamless-loop 48s linear infinite; }
 .review-float { animation: review-float 7s ease-in-out infinite; }
-.review-card { box-shadow: 0 12px 32px -18px #000; }
-.review-marquee:hover .review-float,
-.review-marquee:focus-within .review-float,
+.review-card { box-shadow: 0 0 24px #d4a85718, 0 12px 32px -18px #000, inset 0 1px 0 #d4a85726; }
+.review-avatar { position: relative; display: grid; place-items: center; flex-shrink: 0; width: 56px; height: 56px; color: #e4bd79; background: #d4a8570d; border-radius: 45% 55% 48% 52%; box-shadow: 0 0 18px #d4a85718; }
+.review-avatar svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.review-avatar > span { font-weight: 700; font-size: 16px; letter-spacing: .05em; }
 .review-marquee.is-paused .review-float { animation-play-state: paused; }
 @keyframes review-float { 0%, 100% { transform: translateY(4px); } 50% { transform: translateY(-6px); } }
 .review-window { scrollbar-width: none; max-width: 1536px; margin-inline: auto; }
 .review-window::-webkit-scrollbar { display: none; }
-.review-marquee:hover .review-track,
-.review-marquee:focus-within .review-track,
 .review-marquee.is-paused .review-track { animation-play-state: paused; }
 @keyframes seamless-loop { to { transform: translateX(-50%); } }
 @media (max-width: 767px) {

@@ -43,7 +43,10 @@ assert.equal(proof.reviews.length, 13, "All supplied review screenshots included
 assert.equal(proof.reviews.find((r) => r.author === "Kartik Singla")?.rating, 4, "Preserve the supplied four-star review");
 assert(!reviewSection.includes("data-review-placeholder"), "Real reviews replace empty cards");
 assert(reviewSection.includes("4 out of 5 stars"));
-assert(reviewSection.includes("at time of capture"), "Relative dates are not presented as live dates");
+assert(!reviewSection.includes("at time of capture"), "Review dates are hidden");
+assert(!reviewSection.includes("Reviews from our Google Business Profile"), "Screenshot explanation removed");
+assert(reviewSection.includes("review-avatar"), "Initials avatars appear beside reviewers");
+assert(!/Pause slideshow|Play slideshow|Pause reviews|Resume reviews/.test(home), "Manual playback buttons removed");
 for (const video of proof.testimonials) {
   assert(video.clientName && video.title && video.videoSrc && video.poster && video.captionsSrc && video.transcript, "Accessible, attributed video");
 }

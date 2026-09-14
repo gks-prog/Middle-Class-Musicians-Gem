@@ -128,14 +128,13 @@ export default function Home() {
               <h2 className="text-5xl md:text-7xl font-head leading-none">Latest <em className="text-[#d4a857] not-italic text-glow">Visuals.</em></h2>
             </div>
             
-            <div className="flex gap-4">
-              <button type="button" aria-label="Previous portfolio videos" data-sound="hover" onClick={() => scrollSlider("left")} className="w-14 h-14 rounded-full border border-white/10 bg-[#15151c] flex items-center justify-center hover:bg-[#d4a857] hover:text-black hover:scale-110 box-glow-hover transition-all duration-300">←</button>
-              <button type="button" aria-label="Next portfolio videos" data-sound="hover" onClick={() => scrollSlider("right")} className="w-14 h-14 rounded-full border border-white/10 bg-[#15151c] flex items-center justify-center hover:bg-[#d4a857] hover:text-black hover:scale-110 box-glow-hover transition-all duration-300">→</button>
-            </div>
+
           </div>
         </div>
 
         <div className="relative w-full">
+          <button type="button" aria-label="Previous portfolio videos" onClick={() => scrollSlider("left")} className="carousel-control side-arrow left-2 sm:left-4">←</button>
+          <button type="button" aria-label="Next portfolio videos" onClick={() => scrollSlider("right")} className="carousel-control side-arrow right-2 sm:right-4">→</button>
           <div className="absolute top-0 left-0 w-8 md:w-24 h-full bg-gradient-to-r from-[#0c0c10] to-transparent z-10 pointer-events-none" />
           <div className="absolute top-0 right-0 w-8 md:w-24 h-full bg-gradient-to-l from-[#0c0c10] to-transparent z-10 pointer-events-none" />
 
