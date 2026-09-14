@@ -26,7 +26,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Middle Class Musicians | Recording Studio in Delhi",
+    default: "Middle Class Musicians | Music Recording Studio in Delhi",
     template: "%s | MCM Studio",
   },
   description: siteConfig.description,
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   publisher: siteConfig.name,
   alternates: { canonical: "/" },
   keywords: [
-    "recording studio in Delhi",
+    "music recording studio in Delhi",
     "music studio in Uttam Nagar",
     "vocal recording studio Delhi",
     "mixing and mastering Delhi",
@@ -48,12 +48,12 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: "Middle Class Musicians | Recording Studio in Delhi",
+    title: "Middle Class Musicians | Music Recording Studio in Delhi",
     description: siteConfig.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Middle Class Musicians | Recording Studio in Delhi",
+    title: "Middle Class Musicians | Music Recording Studio in Delhi",
     description: siteConfig.description,
   },
   robots: {
