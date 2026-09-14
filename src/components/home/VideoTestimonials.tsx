@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { videoTestimonials, type VideoTestimonial } from "@/lib/social-proof";
+import { type VideoTestimonial } from "@/lib/social-proof";
 
 function Preview({ video, paused, onOpen }: { video: VideoTestimonial; paused: boolean; onOpen: (time: number, button: HTMLButtonElement) => void }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -33,7 +33,8 @@ function Preview({ video, paused, onOpen }: { video: VideoTestimonial; paused: b
   </article>;
 }
 
-export default function VideoTestimonials() {
+export default function VideoTestimonials({ videos }: { videos: VideoTestimonial[] }) {
+  const videoTestimonials = videos;
   const [active, setActive] = useState<VideoTestimonial | null>(null);
   const [playError, setPlayError] = useState(false);
   const modal = useRef<HTMLDialogElement>(null);

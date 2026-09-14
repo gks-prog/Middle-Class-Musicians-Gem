@@ -1,0 +1,247 @@
+{
+  "blogs": [
+    {
+      "category": "rappers",
+      "content": "This is the #1 mistake we hear. It happens when you use generic YouTube beats that lack headroom, combined with poor vocal compression. At MCM, we use dynamic EQ carving to create a 'pocket' in the beat's frequency spectrum specifically for your vocal tone, then glue them together with analog bus compression. The result is a track that sounds like a cohesive record, not karaoke.",
+      "date": "",
+      "excerpt": "This is the #1 mistake we hear. It happens when you use generic YouTube beats that lack headroom, combined with poor vocal compression. At MCM, w…",
+      "id": "rappers-1",
+      "slug": "rappers-guide-1",
+      "title": "Why do my vocals sound 'pasted' on top of the beat?"
+    },
+    {
+      "category": "rappers",
+      "content": "If you know your lyrics and flow, tracking lead vocals takes 1-2 hours. But a premium record requires ad-libs, harmonies, and dubs. We block our MCM sessions to ensure artists never feel rushed. We handle the technical setup flawlessly so you can focus entirely on your performance and delivery.",
+      "date": "",
+      "excerpt": "If you know your lyrics and flow, tracking lead vocals takes 1-2 hours. But a premium record requires ad-libs, harmonies, and dubs. We block our …",
+      "id": "rappers-2",
+      "slug": "rappers-guide-2",
+      "title": "How long does a professional recording session actually take?"
+    },
+    {
+      "category": "rappers",
+      "content": "Many rappers kill it in the car but freeze in the booth. The fix is preparation and environment. Memorize your lyrics to the point of muscle memory. At MCM, we manipulate the booth lighting and monitor mixes to make you feel like you are on stage, not taking a test.",
+      "date": "",
+      "excerpt": "Many rappers kill it in the car but freeze in the booth. The fix is preparation and environment. Memorize your lyrics to the point of muscle memo…",
+      "id": "rappers-3",
+      "slug": "rappers-guide-3",
+      "title": "How to overcome 'Red Light Syndrome'"
+    },
+    {
+      "category": "producers",
+      "content": "No. Stock plugins can produce professional results when sound selection, arrangement, gain staging, and monitoring are handled well. The real limitation is often judgement: you cannot correct what you cannot hear clearly. A controlled monitoring environment makes low-end decisions more reliable across headphones, cars, and speakers.",
+      "date": "",
+      "excerpt": "No. Stock plugins can produce professional results when sound selection, arrangement, gain staging, and monitoring are handled well. The real lim…",
+      "id": "producers-1",
+      "slug": "producers-guide-1",
+      "title": "Are expensive plugins necessary for industry-standard beats?"
+    },
+    {
+      "category": "producers",
+      "content": "You don't need to read sheet music, but understanding scales and chord progressions separates beatmakers from producers. Knowing theory cuts your workflow time in half and prevents the dreaded 'beat block' when you are searching for the next melodic layer.",
+      "date": "",
+      "excerpt": "You don't need to read sheet music, but understanding scales and chord progressions separates beatmakers from producers. Knowing theory cuts your…",
+      "id": "producers-2",
+      "slug": "producers-guide-2",
+      "title": "Should beginners learn music theory?"
+    },
+    {
+      "category": "producers",
+      "content": "Stop turning the fader up. The secret to massive 808s is saturation, distortion, and subtractive EQ on the kick drum to prevent phase cancellation. Give the 808 space in the mix, don't force it.",
+      "date": "",
+      "excerpt": "Stop turning the fader up. The secret to massive 808s is saturation, distortion, and subtractive EQ on the kick drum to prevent phase cancellatio…",
+      "id": "producers-3",
+      "slug": "producers-guide-3",
+      "title": "How to make 808s punch without clipping the master"
+    }
+  ],
+  "reviews": [
+    {
+      "author": "Harsh Lambert",
+      "dateLabel": "4 months ago",
+      "id": "review-1",
+      "rating": 5,
+      "sourceScreenshot": "d92d55e8-f012-4cc8-b730-08ad7a79de16.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Genuine.\n\nI just finished a song with them, just amazing result.\nWill be working with them in future as well."
+    },
+    {
+      "author": "Ashraf Ali",
+      "dateLabel": "11 months ago",
+      "id": "review-2",
+      "rating": 5,
+      "sourceScreenshot": "e800635e-e8a5-4eaf-8037-b881384ae18b.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Had a great experience at Middle Class Musicians Studio! Huge thanks to my brother, producer Wenon, for being so supportive, and also big love to my brother Bunny :)"
+    },
+    {
+      "author": "Priyanshu Saini",
+      "dateLabel": "a year ago",
+      "id": "review-3",
+      "rating": 5,
+      "sourceScreenshot": "a2e61228-c1bc-4d85-b008-d1196ae081d7.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "My first ever studio experience at middle class musician is damn amazing, they are very helpful and supports you like brothers👍 🔥 💗"
+    },
+    {
+      "author": "Rohan Sharma",
+      "dateLabel": "2 years ago",
+      "id": "review-4",
+      "rating": 5,
+      "sourceScreenshot": "ef3fe961-0c61-4835-90a8-6d47475d12b0.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "The ambience is enjoyable and the equipment is gud. The overall experience is very pleasant and it is preferrable over others."
+    },
+    {
+      "author": "Kunal Beatz",
+      "dateLabel": "3 years ago",
+      "id": "review-5",
+      "rating": 5,
+      "sourceScreenshot": "cee62233-5253-4f88-83de-9af0c013e572.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Awesome studio ... Nice work ... Friendly people in the house... Full love full support 💗 💗 💗 💗"
+    },
+    {
+      "author": "Harsh Pawar",
+      "dateLabel": "2 years ago",
+      "id": "review-6",
+      "rating": 5,
+      "sourceScreenshot": "03822d9a-61f4-4330-9523-00d5d1b689ab.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Its a fun studio with gud quality equipment and patient staff."
+    },
+    {
+      "author": "pranjal singh",
+      "dateLabel": "2 years ago",
+      "id": "review-7",
+      "rating": 5,
+      "sourceScreenshot": "9e391269-a277-41e2-9754-ea240e4e52c2.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Very comfortable and vibe space..\nThe team is great\nAnd they are very cooperative"
+    },
+    {
+      "author": "Rahul Thapa",
+      "dateLabel": "3 years ago",
+      "id": "review-8",
+      "rating": 5,
+      "sourceScreenshot": "807264ea-9425-41da-9caa-5c81ad47750d.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Sexy studio and best producer he mix so well and great output"
+    },
+    {
+      "author": "Rinku Singh",
+      "dateLabel": "4 years ago",
+      "id": "review-9",
+      "rating": 5,
+      "sourceScreenshot": "f320055b-4b26-4d53-a62c-4dc598841292.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Good place to learn by professionals must recommend.."
+    },
+    {
+      "author": "Varun singh",
+      "dateLabel": "a year ago",
+      "id": "review-10",
+      "rating": 5,
+      "sourceScreenshot": "cc0036cc-da77-4cc0-a948-9b4b23caace3.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Worth it"
+    },
+    {
+      "author": "Kartik Singla",
+      "dateLabel": "5 months ago",
+      "id": "review-11",
+      "rating": 4,
+      "sourceScreenshot": "0e5ea841-263e-4d62-8e61-57dac2fe8fda.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "bhot badia recording session tha as a beginner bhaiya ne bhot badia guide kara and thank you"
+    },
+    {
+      "author": "Mr.Alfaaz",
+      "dateLabel": "3 years ago",
+      "id": "review-12",
+      "rating": 5,
+      "sourceScreenshot": "fb56fd07-31cd-43f8-92d6-ab59d9c03042.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Brother, I recorded in this studio and literally bro, I enjoyed it. You cannot find work of this level at this price and a studio like this. It's awesome recording there."
+    },
+    {
+      "author": "Lil Wish",
+      "dateLabel": "a year ago",
+      "id": "review-13",
+      "rating": 5,
+      "sourceScreenshot": "1c2a1ac1-c74c-419f-ad9c-8baa55fc4db5.png",
+      "sourceUrl": "https://share.google/2ig5EfQ69dRmQu5qb",
+      "text": "Full of hard work, Vroooooo 🔥 💀\nI learned something new on my first visit.\nCome check out my middle class studio 🎙️"
+    }
+  ],
+  "sections": {
+    "blogs": true,
+    "ecosystem": true,
+    "faq": true,
+    "hero": true,
+    "portfolio": true,
+    "process": true,
+    "reviews": true,
+    "testimonials": true,
+    "visuals": true
+  },
+  "songs": [
+    {
+      "final": "/audio/song-01-final.mp3",
+      "id": "song-1",
+      "raw": "/audio/song-01-raw.mp3",
+      "title": "Song 01"
+    },
+    {
+      "final": "/audio/song-02-final.mp3",
+      "id": "song-2",
+      "raw": "/audio/song-02-raw.mp3",
+      "title": "Song 02"
+    },
+    {
+      "final": "/audio/song-03-final.mp3",
+      "id": "song-3",
+      "raw": "/audio/song-03-raw.mp3",
+      "title": "Song 03"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "client-1",
+      "title": "Client testimonial 1",
+      "videoSrc": "https://res.cloudinary.com/pbekirv1/video/upload/v1789397909/Video-73380.mp4"
+    },
+    {
+      "id": "client-2",
+      "title": "Client testimonial 2",
+      "videoSrc": "https://res.cloudinary.com/pbekirv1/video/upload/v1789397908/Video-51840.mp4"
+    },
+    {
+      "id": "client-3",
+      "title": "Client testimonial 3",
+      "videoSrc": "https://res.cloudinary.com/pbekirv1/video/upload/v1789397909/Video-57978.mp4"
+    }
+  ],
+  "visuals": [
+    {
+      "artist": "DBRAVE",
+      "id": "Lh67UKKh8FU",
+      "title": "4AM"
+    },
+    {
+      "artist": "Vakta",
+      "id": "07D7VGtHLOc",
+      "title": "Controversy"
+    },
+    {
+      "artist": "MC DAITYA",
+      "id": "FEgOKqd_7W8",
+      "title": "MATTHA KHARAB"
+    },
+    {
+      "artist": "MC DAITYA",
+      "id": "3kgBkBZhZMQ",
+      "title": "PYAASI KALAM"
+    }
+  ]
+}

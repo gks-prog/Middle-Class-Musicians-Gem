@@ -1,7 +1,7 @@
 "use client";
 
 import { useInteractionPlayback } from "./useInteractionPlayback";
-import { googleReviews, type GoogleReview } from "@/lib/social-proof";
+import { type GoogleReview } from "@/lib/social-proof";
 
 function ReviewCard({ review }: { review: GoogleReview }) {
   const initials = review.author.trim().split(/\s+/).map((part) => Array.from(part)[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
@@ -20,8 +20,10 @@ function EmptyReviewCard() {
   </div>;
 }
 
-export default function GoogleReviews() {
+export default function GoogleReviews({ reviews }: { reviews: GoogleReview[] }) {
+  const googleReviews = reviews;
   const playback = useInteractionPlayback();
+  if (!googleReviews.length) return null;
   // Repeated visual copies fill the constrained track; assistive tech reads each review once.
   const loop: (GoogleReview | null)[] = googleReviews.length ? Array.from({ length: Math.max(1, Math.ceil(5 / googleReviews.length)) }, () => googleReviews).flat() : Array.from({ length: 5 }, () => null);
   return <section id="google-reviews" aria-labelledby="reviews-heading" className="border-b border-white/5 bg-[#0c0c10] py-16 sm:py-24">
