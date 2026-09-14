@@ -15,7 +15,7 @@ create table if not exists public.studio_content (
   version integer not null default 0,
   updated_at timestamptz not null default now()
 );
-insert into public.studio_content(id) values(1) on conflict (id) do nothing;
+insert into public.studio_content(758ee70b-fe72-471f-86ed-7811f3d3b42d) values(1) on conflict (user_id) do nothing;
 alter table public.studio_content enable row level security;
 revoke all on public.studio_content from anon, authenticated;
 grant select on public.studio_content to anon, authenticated;
