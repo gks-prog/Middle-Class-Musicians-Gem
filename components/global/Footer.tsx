@@ -1,0 +1,136 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { siteConfig } from "@/lib/site";
+
+export default function Footer() {
+  const year = new Date().getFullYear();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [btnText, setBtnText] = useState("Send Inquiry");
+
+  const handleWhatsAppSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    setIsSubmitting(true);
+    setBtnText("Opening WhatsApp...");
+
+    const formData = new FormData(form);
+    const waText = [
+      "New Studio Enquiry",
+      "",
+      `Name: ${formData.get("name")}`,
+      `Service: ${formData.get("service")}`,
+      `Project: ${formData.get("message")}`,
+    ].join("\n");
+
+    window.open(`${siteConfig.whatsapp}?text=${encodeURIComponent(waText)}`, "_blank", "noopener,noreferrer");
+    setBtnText("WhatsApp Opened ✓");
+    window.setTimeout(() => {
+      setIsSubmitting(false);
+      setBtnText("Send Inquiry");
+      form.reset();
+    }, 2500);
+  };
+
+  return (
+    <footer className="w-full bg-[#0c0c10] border-t border-white/5 relative z-10">
+      
+      {/* 1. GLOBAL CONTACT FUNNEL */}
+      <div className="container mx-auto px-6 pt-24 pb-16 border-b border-white/5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 bg-[#15151c] p-8 md:p-14 rounded-[2.5rem] border border-white/5 relative overflow-hidden shadow-2xl">
+          <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#d4a857]/10 blur-[100px] rounded-full pointer-events-none -translate-y-1/2 translate-x-1/3 animate-pulse duration-[5000ms]" />
+          
+          <div className="relative z-10">
+            <span className="text-[#d4a857] font-head tracking-[0.2em] uppercase text-sm block mb-4">Connect</span>
+            <h2 className="text-5xl md:text-7xl font-head leading-none mb-6">Let’s make something <em className="text-[#d4a857] not-italic text-glow">iconic.</em></h2>
+            <p className="text-gray-400 mb-10 max-w-md text-sm leading-relaxed">Select the service you need and send a clear project brief. The message opens in WhatsApp so you can review it before sending.</p>
+            
+            <a href={siteConfig.whatsapp} data-sound="click" target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 sm:gap-6 p-4 rounded-2xl border border-white/5 hover:border-[#d4a857]/50 box-glow-hover transition-all duration-300 bg-[#07070a] w-fit pr-5 sm:pr-8 group">
+              <div className="w-12 h-12 rounded-full bg-[#15151c] flex items-center justify-center text-[#d4a857] font-head text-xl group-hover:scale-110 transition-transform">WA</div>
+              <div>
+                <strong className="block text-sm text-white group-hover:text-[#d4a857] transition-colors">WhatsApp Direct</strong>
+                <span className="text-xs text-gray-500 font-mono mt-1 block">{siteConfig.phoneDisplay}</span>
+              </div>
+            </a>
+          </div>
+
+          <form onSubmit={handleWhatsAppSubmit} className="relative z-10 flex flex-col gap-6" aria-label="Studio enquiry form">
+            <label htmlFor="footer-name" className="sr-only">Your name or artist name</label>
+            <input id="footer-name" type="text" name="name" required autoComplete="name" placeholder="Your Name / Artist Name" data-sound="hover" className="w-full bg-[#07070a] border border-white/10 rounded-2xl p-5 text-white focus:outline-none focus:border-[#d4a857] focus:shadow-[0_0_20px_rgba(212,168,87,0.2)] transition-all duration-300" />
+            <label htmlFor="footer-service" className="sr-only">Required service</label>
+            <select id="footer-service" name="service" required defaultValue="" data-sound="click" className="w-full bg-[#07070a] border border-white/10 rounded-2xl p-5 text-gray-400 focus:outline-none focus:border-[#d4a857] focus:shadow-[0_0_20px_rgba(212,168,87,0.2)] transition-all duration-300 appearance-none cursor-pointer">
+              <option value="" disabled>Select a Service</option>
+              <option value="Recording & Mixing">Recording & Mixing</option>
+              <option value="Beat Production">Beat Production</option>
+              <option value="Video Production">Video Production</option>
+              <option value="Music Courses">Academy / Courses</option>
+            </select>
+            <label htmlFor="footer-message" className="sr-only">Project details</label>
+            <textarea id="footer-message" name="message" required rows={4} maxLength={1200} placeholder="Tell us about your project or vision..." data-sound="hover" className="w-full bg-[#07070a] border border-white/10 rounded-2xl p-5 text-white focus:outline-none focus:border-[#d4a857] focus:shadow-[0_0_20px_rgba(212,168,87,0.2)] transition-all duration-300 resize-none" />
+            
+            <button type="submit" disabled={isSubmitting} data-sound="click" className="w-full py-5 bg-white text-black font-bold uppercase tracking-widest rounded-2xl hover:bg-[#d4a857] box-glow-hover hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 mt-2">
+              {btnText}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* 2. STANDARD FOOTER & MAP */}
+      <div className="container mx-auto px-6 pt-16 pb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 mb-20">
+          <div className="lg:col-span-1">
+            <h3 className="font-head text-4xl tracking-widest mb-4 flex items-center gap-2">
+              <span className="text-[#d4a857] text-glow">MCM</span> STUDIO
+            </h3>
+            <p className="text-gray-400 text-sm max-w-sm mb-8 leading-relaxed">
+              Delhi’s recording studio for vocal tracking, mixing, mastering, and beat production. Built for sound. Designed for vision.
+            </p>
+            <div className="flex gap-8 text-xs font-bold tracking-[0.2em] uppercase text-gray-500">
+              <a href={siteConfig.instagram} data-sound="hover" target="_blank" rel="noopener noreferrer" className="hover:text-white hover:text-glow transition-all">Instagram</a>
+              <a href={`tel:${siteConfig.phoneE164}`} className="hover:text-white transition-all">Call</a>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 font-head text-2xl tracking-widest uppercase text-gray-400">
+            {["Studio", "Services", "Portfolio", "Blogs", "Courses"].map((link) => (
+              <Link key={link} href={`/${link.toLowerCase()}`} data-sound="hover" className="hover:text-white hover:translate-x-2 transition-all w-fit">{link}</Link>
+            ))}
+          </div>
+
+          <div className="flex justify-start md:justify-end lg:col-span-1">
+            <div className="w-full max-w-md">
+              <div className="h-64 overflow-hidden rounded-3xl border border-white/10 bg-[#15151c] shadow-xl shadow-black/30">
+                <iframe
+                  title="Interactive Google map showing Middle Class Musicians in Uttam Nagar, New Delhi"
+                  src="https://maps.google.com/maps?q=Middle%20Class%20Musicians%2C%20Uttam%20Nagar%2C%20New%20Delhi&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="block h-full w-full"
+                />
+              </div>
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-white">Find the studio</p>
+                  <p className="mt-1 text-[10px] text-gray-500">Uttam Nagar · New Delhi · 110059</p>
+                </div>
+                <a href={siteConfig.maps} aria-label="Get directions to Middle Class Musicians in Google Maps" target="_blank" rel="noopener noreferrer" className="shrink-0 rounded-full border border-[#d4a857]/40 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[#d4a857] transition-colors hover:bg-[#d4a857] hover:text-black">
+                  Directions ↗
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-xs font-semibold tracking-widest uppercase text-gray-600 border-t border-white/5 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <span>© {year} Middle Class Musicians.</span>
+          <span>Uttam Nagar · New Delhi · 110059</span>
+        </div>
+      </div>
+    </footer>
+  );
+}
