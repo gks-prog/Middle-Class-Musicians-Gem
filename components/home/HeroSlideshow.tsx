@@ -43,7 +43,7 @@ export default function HeroSlideshow() {
       setActive((current) => (current + 1) % slides.length);
     }, SLIDE_DURATION);
     return () => window.clearInterval(timer);
-  }, [paused]);
+  }, [paused, active]);
 
   return (
     <section
